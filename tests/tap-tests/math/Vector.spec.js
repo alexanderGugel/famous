@@ -12,13 +12,11 @@ test('Vector', function(t) {
         t.deepEqual(vec1.get(), desired, 'Vector constructor should accept objects and arrays');
         t.deepEqual(vec2.get(), desired, 'Vector constructor should accept objects and arrays');
 
-        // var vec3 = new Vector();
-        // var vec4 = new Vector([]);
-        // var vec5 = new Vector({});
-
-        // t.deepEqual(vec3.get(), [0, 0, 0], 'Vector state should default to [0, 0, 0]');
-        // t.deepEqual(vec4.get(), [0, 0, 0], 'Vector state should default to [0, 0, 0]');
-        // t.deepEqual(vec5.get(), [0, 0, 0], 'Vector state should default to [0, 0, 0]');
+        // TODO This test should pass, but Vector accepts not only explicit arguments (not documented)
+        // t.deepEqual(new Vector().get(), [0, 0, 0], 'Vector state should default to [0, 0, 0]');
+        // t.deepEqual(new Vector([]).get(), [0, 0, 0], 'Vector state should default to [0, 0, 0]');
+        // t.deepEqual(new Vector({}).get(), [0, 0, 0], 'Vector state should default to [0, 0, 0]');
+        // t.deepEqual(new Vector(new Vector()).get(), [0, 0, 0], 'Vector state should default to [0, 0, 0]');
 
         t.end();
     });
@@ -148,85 +146,61 @@ test('Vector', function(t) {
         t.end();
     });
 
+    t.test('rotateX method', function(t) {
+        t.equal(typeof Vector.prototype.rotateX, 'function', 'Vector.rotateX should be a function');
+
+        var vec = new Vector([1, 2, 3]);
+        t.deepEquals(vec.rotateX(0).get(), [1, 2, 3], 'Vector.rotateX should rotate clockwise around x-axis by theta radians');
+        t.deepEquals(vec.rotateX(1).get(), [1, -1.4438083426874098, 3.3038488872202123], 'Vector.rotateX should rotate clockwise around x-axis by theta radians');
+        t.deepEquals(vec.rotateX(4).get(), [1, 0.9631202441965605, -3.4745358532066923], 'Vector.rotateX should rotate clockwise around x-axis by theta radians');
+        t.deepEquals(vec.rotateX(5).get(), [1, 3.4440971949158676, -1.0668619929365981], 'Vector.rotateX should rotate clockwise around x-axis by theta radians');
+
+        t.end();
+    });
+
+    t.test('rotateY method', function(t) {
+        t.equal(typeof Vector.prototype.rotateY, 'function', 'Vector.rotateY should be a function');
+
+        var vec = new Vector([1, 2, 3]);
+        t.deepEquals(vec.rotateY(0).get(), [1, 2, 3], 'Vector.rotateY should rotate clockwise around y-axis by theta radians');
+        t.deepEquals(vec.rotateY(1).get(), [3.064715260291829, 2, 0.7794359327965228], 'Vector.rotateY should rotate clockwise around y-axis by theta radians');
+        t.deepEquals(vec.rotateY(4).get(), [-2.924051106787396, 2, -1.2041283672829077], 'Vector.rotateY should rotate clockwise around y-axis by theta radians');
+
+        t.end();
+    });
+
+    t.test('rotateZ method', function(t) {
+        t.equal(typeof Vector.prototype.rotateZ, 'function', 'Vector.rotateZ should be a function');
+
+        var vec = new Vector([1, 2, 3]);
+        t.deepEquals(vec.rotateZ(0).get(), [1, 2, 3], 'Vector.rotateZ should rotate clockwise around z-axis by theta radians');
+        t.deepEquals(vec.rotateZ(1).get(), [-1.1426396637476532, 1.922075596544176, 3], 'Vector.rotateZ should rotate clockwise around z-axis by theta radians');
+        t.deepEquals(vec.rotateZ(4).get(), [0.8599613697522445, -2.064089737035152, 3], 'Vector.rotateZ should rotate clockwise around z-axis by theta radians');
+
+        t.end();
+    });
+
+    t.test('dot method', function(t) {
+        t.equal(typeof Vector.prototype.dot, 'function', 'Vector.dot should be a function');
+
+        var vec = new Vector([1, 2, 3]);
+        t.deepEquals(vec.dot(new Vector([4, 5, 6])), 32, 'Vector.dot should return the dot product of this with a second Vector');
+        t.deepEquals(vec.dot(new Vector([4, 8, 6])), 38, 'Vector.dot should return the dot product of this with a second Vector');
+        t.deepEquals(vec.dot(new Vector([1, 1, 0])), 3, 'Vector.dot should return the dot product of this with a second Vector');
+
+        t.end();
+    });
+
+
+
+
+
+
+    
+
 
 });
 
-
-//     /**
-//      * Rotate clockwise around x-axis by theta radians.
-//      *   Note: This sets the internal result register, so other references to that vector will change.
-//      * @method rotateX
-//      * @param {number} theta radians
-//      * @return {Vector} rotated vector
-//      */
-//     Vector.prototype.rotateX = function rotateX(theta) {
-//         var x = this.x;
-//         var y = this.y;
-//         var z = this.z;
-
-//         var cosTheta = Math.cos(theta);
-//         var sinTheta = Math.sin(theta);
-
-//         return _setXYZ.call(_register,
-//             x,
-//             y * cosTheta - z * sinTheta,
-//             y * sinTheta + z * cosTheta
-//         );
-//     };
-
-//     /**
-//      * Rotate clockwise around y-axis by theta radians.
-//      *   Note: This sets the internal result register, so other references to that vector will change.
-//      * @method rotateY
-//      * @param {number} theta radians
-//      * @return {Vector} rotated vector
-//      */
-//     Vector.prototype.rotateY = function rotateY(theta) {
-//         var x = this.x;
-//         var y = this.y;
-//         var z = this.z;
-
-//         var cosTheta = Math.cos(theta);
-//         var sinTheta = Math.sin(theta);
-
-//         return _setXYZ.call(_register,
-//             z * sinTheta + x * cosTheta,
-//             y,
-//             z * cosTheta - x * sinTheta
-//         );
-//     };
-
-//     /**
-//      * Rotate clockwise around z-axis by theta radians.
-//      *   Note: This sets the internal result register, so other references to that vector will change.
-//      * @method rotateZ
-//      * @param {number} theta radians
-//      * @return {Vector} rotated vector
-//      */
-//     Vector.prototype.rotateZ = function rotateZ(theta) {
-//         var x = this.x;
-//         var y = this.y;
-//         var z = this.z;
-
-//         var cosTheta = Math.cos(theta);
-//         var sinTheta = Math.sin(theta);
-
-//         return _setXYZ.call(_register,
-//             x * cosTheta - y * sinTheta,
-//             x * sinTheta + y * cosTheta,
-//             z
-//         );
-//     };
-
-//     /**
-//      * Return dot product of this with a second Vector
-//      * @method dot
-//      * @param {Vector} v second vector
-//      * @return {number} dot product
-//      */
-//     Vector.prototype.dot = function dot(v) {
-//         return this.x * v.x + this.y * v.y + this.z * v.z;
-//     };
 
 //     /**
 //      * Return squared length of this vector
