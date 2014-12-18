@@ -83,17 +83,65 @@ test('Matrix', function(t) {
     t.test('multiply method', function(t) {
         t.equal(typeof Matrix.prototype.multiply, 'function', 'Matrix.multiply should be a function');
 
+        var m = new Matrix([
+            [1, 2, 4],
+            [1, 6, 4],
+            [4, 5, 9]
+        ]);
+
+        var result = m.multiply([
+            [5, 6, 7],
+            [1, 3, 7],
+            [0, 3, 5]
+        ]);
+
+        var expected = [
+            [3, 5, 5],
+            [3, 5, 5],
+            [3, 5, 5]
+        ];
+
+        t.deepEqual(result, expected, 'Matrix.multiply should multiply two matrices');
+
         t.end();
     });
     
     t.test('transpose method', function(t) {
         t.equal(typeof Matrix.prototype.transpose, 'function', 'Matrix.transpose should be a function');
 
+        var state = [
+            [1, 2, 23],
+            [1, 9, 32],
+            [1, 34, 1]
+        ];
+        
+        var arg = [
+            [1, 2, 0],
+            [0, 0, 32],
+            [2, 4, 1]
+        ];
+
+        var result = [
+            [1, 2, 3],
+            [1, 9, 2],
+            [1, 34, 1]
+        ];
+
+        // var m = new Matrix(state);
+        // t.deepEqual(m.transpose(arg), result, 'Matrix.transpose should transpose matrix');
+
         t.end();
     });
 
     t.test('clone method', function(t) {
         t.equal(typeof Matrix.prototype.clone, 'function', 'Matrix.clone should be a function');
+        var state = [
+            [31, 12, 23],
+            [31, 23, 34],
+            [131, 21, 31]
+        ];
+        var m = new Matrix(state);
+        t.deepEqual(m.clone().get(), state, 'Matrix.clone should return cloned Matrix');
 
         t.end();
     });
@@ -125,38 +173,4 @@ test('Matrix', function(t) {
 //             }
 //         }
 //         return _register.set(result);
-//     };
-
-//     /**
-//      * Creates a Matrix which is the transpose of this matrix.
-//      *   Note: This sets the internal matrix register.  Current handles to the register
-//      *   will see values changed.
-//      *
-//      * @method transpose
-//      *
-//      * @return {Matrix} result of transpose, as a handle to the internal register
-//      */
-//     Matrix.prototype.transpose = function transpose() {
-//         var result = [];
-//         var M = this.get();
-//         for (var row = 0; row < 3; row++) {
-//             for (var col = 0; col < 3; col++) {
-//                 result[row][col] = M[col][row];
-//             }
-//         }
-//         return _register.set(result);
-//     };
-
-//     /**
-//      * Clones the matrix
-//      *
-//      * @method clone
-//      * @return {Matrix} New copy of the original matrix
-//      */
-//     Matrix.prototype.clone = function clone() {
-//         var values = this.get();
-//         var M = [];
-//         for (var row = 0; row < 3; row++)
-//             M[row] = values[row].slice();
-//         return new Matrix(M);
 //     };
