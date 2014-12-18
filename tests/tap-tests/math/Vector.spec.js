@@ -12,6 +12,7 @@ test('Vector', function(t) {
         t.deepEqual(vec1.get(), desired, 'Vector constructor should accept objects and arrays');
         t.deepEqual(vec2.get(), desired, 'Vector constructor should accept objects and arrays');
 
+        // TODO Bug in famo.us
         // TODO This test should pass, but Vector accepts not only explicit arguments (not documented)
         // t.deepEqual(new Vector().get(), [0, 0, 0], 'Vector state should default to [0, 0, 0]');
         // t.deepEqual(new Vector([]).get(), [0, 0, 0], 'Vector state should default to [0, 0, 0]');
