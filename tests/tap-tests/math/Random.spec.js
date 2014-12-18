@@ -1,21 +1,56 @@
 var test = require('tape');
 var Random = require('../../../src/math/Random');
 
-// Note
-// Testing random number generators is damn hard, theerefore the following tests are pretty weak and probalistic
+// TODO
+// - Testing random number generators is damn hard, therefore the following tests are pretty weak and probalistic
+// - current Famo.us has inconsistent API: integer should be renamed to integerRange, range to floatRange
+// - several bugs (see below)
 test('Random', function(t) {
     t.test('integer method', function(t) {
         t.equal(typeof Random.integer, 'function', 'Random.integer should be a function');
+
+        // TODO Bug in famo.us
+        // var max;
+        // for (var min = -10; min < 20; min++) {
+        //     for (var add = 0; add < 10; add++) {
+        //         max = min + add;
+        //         var random = Random.integer(min, max);
+        //         t.ok(random >= min && random <= max, 'Random.integer should return random number (' + random + ') [' + min + ';' + max + ']');
+        //     }
+        // }
+
         t.end();
     });
     
     t.test('range method', function(t) {
         t.equal(typeof Random.range, 'function', 'Random.range should be a function');
+
+        // TODO refactor integer and range, so we only have to test once
+
         t.end();
     });
     
     t.test('sign method', function(t) {
         t.equal(typeof Random.sign, 'function', 'Random.sign should be a function');
+
+        // TODO refactor using bool
+
+        var n = 1000;
+
+        for (var probability = 0; probability < 1; probability += 0.1) {
+            var sum = 0;
+            for (var j = 0; j < n; j++) {
+                var random = Random.sign(probability);
+                if (random !== -1 && random !== 1) {
+                    t.fail('Random.sign should return {-1; 1}, but returned ' + random);
+                }
+
+                if (random === -1) random = 0;
+                sum += random;
+            }
+            t.equal(Math.round((sum/n)*10), Math.round(probability*10), 'Random.sign should return 1 with probability ' + probability);
+        }
+
         t.end();
     });
     
@@ -24,10 +59,11 @@ test('Random', function(t) {
         var returnedTrue = false;
         var returnedFalse = false;
 
-        for (var i = 0; i < 100; i++) {
-            if (Random.bool() === true) {
+        for (var i = 0; i < 200; i++) {
+            var random = Random.bool();
+            if (random === true) {
                 returnedTrue = true;
-            } else if (Random.bool() === false) {
+            } else if (random === false) {
                 returnedFalse = true;
             } else {
                 t.fail('Random.bool should only return true and false');
