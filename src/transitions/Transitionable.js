@@ -29,7 +29,7 @@ define(function(require, exports, module) {
      *
      * @class Transitionable
      * @constructor
-     * @param {number|Array.Number|Object.<number|string, number>} start
+     * @param {number|FamousMatrix|Array.Number|Object.<number, number>} start
      *    beginning state
      */
     function Transitionable(start) {
