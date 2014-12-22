@@ -4,13 +4,8 @@ var Vector = require('../../../src/math/Vector');
 
 test('Matrix', function(t) {
     t.test('constructor', function(t) {
+        t.equal(typeof Matrix, 'function', 'Matrix should be a function');
         var m = new Matrix();
-
-        var desiredMethods = ['get', 'set', 'vectorMultiply', 'multiply', 'transpose', 'clone'];
-        for (var i = 0; i < desiredMethods.length; i++) {
-            var methodName = desiredMethods[i];
-            t.equals(typeof m[methodName], 'function', 'Matrix should have ' + methodName + ' method');
-        }
 
         t.end();
     });

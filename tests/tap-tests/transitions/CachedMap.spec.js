@@ -26,7 +26,6 @@ test('CachedMap', function(t) {
         t.end();
     });
 
-
     t.test('get method', function(t) {
         t.plan(5);
         t.equal(typeof CachedMap.prototype.get, 'function', 'CachedMap.prototype.get should be a function');

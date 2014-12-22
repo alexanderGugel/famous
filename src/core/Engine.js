@@ -251,6 +251,16 @@ define(function(require, exports, module) {
     };
 
     /**
+     * Remove framt time limit previously set via Engine.setFPSCap
+     *
+     * @static
+     * @method removeFPSCap
+     */
+    Engine.removeFPSCap = function removeFPSCap() {
+        frameTimeLimit = undefined;
+    };
+
+    /**
      * Return engine options.
      *
      * @static
@@ -285,6 +295,7 @@ define(function(require, exports, module) {
      *
      * @static
      * @method createContext
+     * @private
      *
      * @param {Node} el will be top of Famo.us document element tree
      * @return {Context} new Context within el

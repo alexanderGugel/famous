@@ -36,8 +36,36 @@ test('Engine', function(t) {
 	t.test('emit method', function(t) {
 		t.equal(typeof Engine.emit, 'function', 'Engine.emit should be a function');
 
+		t.test('prerender and postrender event', function(t) {
+			t.plan(3);
+			var invokedPrerender = false;
+			var invokedPostrender = false;
+			var onPrerender = function() {
+				if (invokedPrerender) return;
+				t.pass('Engine should emit \'prerender\' event');
+				invokedPrerender = true;
+				Engine.removeListener(onPrerender);
+			};
+			var onPostrender = function() {
+				if (invokedPostrender) return;
+				t.pass('Engine should emit \'postrender\' event');
+				t.ok(invokedPrerender, 'Engine should emit prerender event before postrender event');
+				invokedPostrender = true;
+				Engine.removeListener(onPostrender);
+			};
+			Engine.on('prerender', onPrerender);
+			Engine.on('postrender', onPostrender);
+		});
 
-		// Tested in EventHandler
+		t.plan('resize event', function(t) {
+			t.plan(1);
+			var onresize = function() {
+				t.pass('Engine should ')
+				Engine.removeListener(onresize);
+			};
+			Engine.on('resize', onresize);
+			window.onresize();
+		});
 
 		t.end();
 	});
@@ -102,14 +130,15 @@ test('Engine', function(t) {
 	t.test('createContext method', function(t) {
 		t.equal(typeof Engine.createContext, 'function', 'Engine.createContext should be a function');
 
-		// var c1 = Engine.createContext();
-		// t.ok(c1 instanceof Context, 'Engine.createContext should return Context');
+		var c1 = Engine.createContext();
+		t.ok(c1 instanceof Context, 'Engine.createContext should return Context');
 
-		// var el = document.createElement('div');
-		// var c2 = new Context(el);
+		var el = document.createElement('div');
+		var c2 = new Context(el);
+		t.ok(c2 instanceof Context, 'Engine.createContext should return Context when being passed a DOM element');
 
-		// Engine.deregisterContext(c1);
-		// Engine.deregisterContext(c2);
+		Engine.deregisterContext(c1);
+		Engine.deregisterContext(c2);
 
 		t.end();
 	});
@@ -117,14 +146,18 @@ test('Engine', function(t) {
 	t.test('registerContext method', function(t) {
 		t.equal(typeof Engine.registerContext, 'function', 'Engine.registerContext should be a function');
 
-		// TODO bug in famous
-		// setTimeout(function() {
-			// var c = new Context();
+		// Context is private. The only way to get an instance of Context is therefore through the Engine.
 
-    		// t.end();
-		// }, 100);
-		// Engine.registerContext(c);
-		// Engine.deregisterContext(c);
+		var context = Engine.createContext();
+		t.equal(Engine.getContexts().length, 1, 'Engine.registerContext should result into one more context being available through getContexts()');
+
+		Engine.deregisterContext(context);
+		t.equal(Engine.getContexts().length, 0, 'Deregistering the context in order to obtain an instance of Context without using the private constructor');
+
+		Engine.registerContext(context);
+		t.equal(Engine.getContexts().length, 1, 'Engine.registerContext should result into one more context being available through getContexts()');
+
+		Engine.deregisterContext(context);
 
 		t.end();
 	});

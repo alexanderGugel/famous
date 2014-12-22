@@ -30,7 +30,9 @@ test('Random', function(t) {
         }).sort(), desiredMatches);
 
         for (var i = 0; i < 100; i++) {
-            t.notEqual(Random.range(0, 10) % 1, 1, 'Random.integer should return ints');
+            if (Random.range(0, 10) % 1 === 1) {
+                t.fail('Random.integer should return ints');
+            }
         }
 
         t.end();
@@ -40,7 +42,9 @@ test('Random', function(t) {
         t.equal(typeof Random.range, 'function', 'Random.range should be a function');
 
         for (var i = 0; i < 100; i++) {
-            t.notEqual(Random.range(0, 10) % 1, 0, 'Random.range should return floats');
+            if (Random.range(0, 10) % 1 === 0) {
+                t.fail('Random.range should return floats');
+            }
         }
 
         t.end();
