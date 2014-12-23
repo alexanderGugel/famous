@@ -22,20 +22,17 @@ test('Transitionable', function(t) {
     });
 
     t.test('register method', function(t) {
-    	var transitionable = new Transitionable();
-	    t.equal(typeof transitionable.register, 'function', 'transitionable.register should be a function');
+	    t.equal(typeof Transitionable.register, 'function', 'Transitionable.register should be a function');
 	    t.end();
     });
 
     t.test('registerMethod method', function(t) {
-		var transitionable = new Transitionable();
-	    t.equal(typeof transitionable.registerMethod, 'function', 'transitionable.registerMethod should be a function');
+	    t.equal(typeof Transitionable.registerMethod, 'function', 'Transitionable.registerMethod should be a function');
 	    t.end();
     });
 
     t.test('unregisterMethod method', function(t) {
-		var transitionable = new Transitionable();
-	    t.equal(typeof transitionable.unregisterMethod, 'function', 'transitionable.unregisterMethod should be a function');
+	    t.equal(typeof Transitionable.unregisterMethod, 'function', 'Transitionable.unregisterMethod should be a function');
 	    t.end();
     });
 
@@ -43,7 +40,6 @@ test('Transitionable', function(t) {
 		var transitionable = new Transitionable();
 	    t.equal(typeof transitionable.set, 'function', 'transitionable.set should be a function');
 
-	    var transitionable = new Transitionable();
 	    transitionable.set(0);
 	    t.equal(transitionable.get(), 0, 'Transitionable.set should set state');
 
@@ -104,14 +100,15 @@ test('Transitionable', function(t) {
   //   });
 
     t.test('halt method', function(t) {
-	    t.equal(typeof Transitionable.prototype.halt, 'function', 'Transitionable.halt should be a function');
+		var transitionable = new Transitionable();
+	    t.equal(typeof transitionable.halt, 'function', 'transitionable.halt should be a function');
 
 	    var transitionable = new Transitionable(0);
 	    transitionable.set(1, { duration: 500 });
 
 	    setTimeout(function() {
 		    transitionable.halt()
-		    t.equal(Math.round(transitionable.get()*100), 0.5*100, 'Transitionable.halt should halt transition');
+		    t.equal(Math.round(transitionable.get()*100), 0.5*100, 'transitionable.halt should halt transition');
 	    }, 250);
 	    t.end();
     });
