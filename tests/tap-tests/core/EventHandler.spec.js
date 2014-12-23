@@ -36,6 +36,13 @@ test('EventHandler', function(t) {
         t.end();
     });
 
+    t.test('pipe method', function(t) {
+        var eventHandler = new EventHandler();
+        t.equal(typeof eventHandler.pipe, 'function', 'eventHandler.pipe should be a function');
+
+       t.end(); 
+    });
+
     // TODO
 });
 
