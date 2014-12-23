@@ -15,7 +15,8 @@ test('EventHandler', function(t) {
 
     t.test('EventEmitter methods', function(t) {
     	var eventHandler = new EventHandler();
-    	for (var prop in EventEmitter.prototype) {
+        var eventEmitter = new EventEmitter()
+    	for (var prop in eventEmitter) {
     		if (typeof prop === 'function') {
     			t.ok(eventHandler[prop], 'EventEmitter should have all methods of EventEmitter, including ' + prop);
     		}
@@ -24,10 +25,18 @@ test('EventHandler', function(t) {
     });
 
     t.test('setInputHandler method', function(t) {
-        t.equal(typeof EventHandler.prototype.setInputHandler, 'function', 'EventHandler.setInputHandler should be a function');
+        t.equal(typeof EventHandler.setInputHandler, 'function', 'EventHandler.setInputHandler should be a function');
 
         t.end();
     });
+
+    t.test('setOutputHandler method', function(t) {
+        t.equal(typeof EventHandler.setOutputHandler, 'function', 'EventHandler.setOutputHandler should be a function');
+
+        t.end();
+    });
+
+    // TODO
 });
 
 //     /**

@@ -4,7 +4,12 @@ var Quaternion = require('../../../src/math/Quaternion');
 test('Quaternion', function(t) {
     t.test('constructor', function(t) {
         t.equal(typeof Quaternion, 'function', 'Quaternion should be a function');
-        var q = new Quaternion();
+
+        t.doesNotThrow(function() {
+	        var q = new Quaternion(1, 2, 3, 4);
+        }, 'Quaternion constructor should not throw an error');
+
+        t.end();
     });
 });
 

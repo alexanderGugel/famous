@@ -28,7 +28,8 @@ test('CachedMap', function(t) {
 
     t.test('get method', function(t) {
         t.plan(5);
-        t.equal(typeof CachedMap.prototype.get, 'function', 'CachedMap.prototype.get should be a function');
+        var cachedMap = new CachedMap();
+        t.equal(typeof cachedMap.get, 'function', 'cachedMap.get should be a function');
 
         var callMeTwice = function(input) {
             t.pass('CachedMap called function once for input ' + input);
