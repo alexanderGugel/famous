@@ -1,7 +1,7 @@
 ## Overview
 
-* Filenames of tests have the format tests/tap-tests/**/*.spec.js
-* utilities/**/*.js are helpers used for testing specific behavior
+* Filenames of tests have the format `tests/tap-tests/**/*.spec.js`
+* `utilities/**/*.js` are helpers used for testing specific behavior
 
 ## Conventions
 
@@ -12,6 +12,8 @@
 * Use `t.plan(x)` for tests that contain assertions within callbacks,
   even if the tests should be synchronous (e.g. when dealing with
   events)
+* Don't test **internals**, **private methods** or **private classes**
+  (I'm looking at you, Context.js)
 
 # Testing existence of methods
 
