@@ -5,59 +5,118 @@ test('Transitionable', function(t) {
     t.test('constructor', function(t) {
         t.equal(typeof Transitionable, 'function', 'Transitionable should be a function');
 
+        var args = [ undefined, 2, [1, 2], [1, 2, 3] ];
+
+        t.doesNotThrow(function() {
+        	args.forEach(function(arg) {
+        		new Transitionable(arg);
+        	});
+        }, 'Transitionable constructor should not throw an error');
+
+        args.forEach(function(arg) {
+        	var transitionable = new Transitionable(arg);
+        	t.equal(transitionable.get(), arg, 'Engine constructor should set intial state');
+        });
 
         t.end();
     });
+
+    t.test('register method', function(t) {
+    	var transitionable = new Transitionable();
+	    t.equal(typeof transitionable.register, 'function', 'transitionable.register should be a function');
+	    t.end();
+    });
+
+    t.test('registerMethod method', function(t) {
+		var transitionable = new Transitionable();
+	    t.equal(typeof transitionable.registerMethod, 'function', 'transitionable.registerMethod should be a function');
+	    t.end();
+    });
+
+    t.test('unregisterMethod method', function(t) {
+		var transitionable = new Transitionable();
+	    t.equal(typeof transitionable.unregisterMethod, 'function', 'transitionable.unregisterMethod should be a function');
+	    t.end();
+    });
+
+    t.test('set method', function(t) {
+		var transitionable = new Transitionable();
+	    t.equal(typeof transitionable.set, 'function', 'transitionable.set should be a function');
+
+	    var transitionable = new Transitionable();
+	    transitionable.set(0);
+	    t.equal(transitionable.get(), 0, 'Transitionable.set should set state');
+
+	    transitionable.set(1);
+	    t.equal(transitionable.get(), 1, 'Transitionable.set should set state');
+
+	    transitionable.set(2);
+	    t.equal(transitionable.get(), 2, 'Transitionable.set should set state');
+
+	    t.end();
+    });
+
+    t.test('reset method', function(t) {
+		var transitionable = new Transitionable();
+	    t.equal(typeof transitionable.reset, 'function', 'transitionable.reset should be a function');
+
+	    // TODO
+	    var transitionable = new Transitionable();
+	    transitionable.set(0);
+	    // transitionable.reset();
+	    // t.equal(transitionable.get(), 0, 'Transitionable.reset should reset state if transition is active');
+
+	    // transitionable.set(1, { duration: 100 });
+
+	    // transitionable.reset();
+	    // t.equal(transitionable.get(), 0, 'Transitionable.reset should reset state');
+
+	    t.end();
+    });
+
+    t.test('delay method', function(t) {
+		var transitionable = new Transitionable();
+	    t.equal(typeof transitionable.delay, 'function', 'transitionable.delay should be a function');
+
+	    var transitionable = new Transitionable(0);
+	    transitionable
+	    t.end();
+    });
+
+    t.test('get method', function(t) {
+		var transitionable = new Transitionable();
+	    t.equal(typeof transitionable.get, 'function', 'transitionable.get should be a function');
+	    t.end();
+    });
+
+  //   t.test('isActive method', function(t) {
+  //   	t.plan(4);
+	 //    t.equal(typeof Transitionable.prototype.isActive, 'function', 'Transitionable.isActive should be a function');
+
+	 //    var transitionable = new Transitionable(0);
+	 //    t.notOk(transitionable.isActive());
+
+	 //    transitionable.set(1, { duration: 100 }, function() {
+	 //    	console.log('boom');
+		//     t.notOk(transitionable.isActive());
+	 //    });
+		// t.ok(transitionable.isActive());
+  //   });
+
+    t.test('halt method', function(t) {
+	    t.equal(typeof Transitionable.prototype.halt, 'function', 'Transitionable.halt should be a function');
+
+	    var transitionable = new Transitionable(0);
+	    transitionable.set(1, { duration: 500 });
+
+	    setTimeout(function() {
+		    transitionable.halt()
+		    t.equal(Math.round(transitionable.get()*100), 0.5*100, 'Transitionable.halt should halt transition');
+	    }, 250);
+	    t.end();
+    });
 });
 
-
-// /* This Source Code Form is subject to the terms of the Mozilla Public
-//  * License, v. 2.0. If a copy of the MPL was not distributed with this
-//  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
-//  *
-//  * Owner: david@famo.us
-//  * @license MPL 2.0
-//  * @copyright Famous Industries, Inc. 2014
-//  */
-
-// define(function(require, exports, module) {
-//     var MultipleTransition = require('./MultipleTransition');
-//     var TweenTransition = require('./TweenTransition');
-
-//     /**
-//      * A state maintainer for a smooth transition between
-//      *    numerically-specified states. Example numeric states include floats or
-//      *    Transform objects.
-//      *
-//      * An initial state is set with the constructor or set(startState). A
-//      *    corresponding end state and transition are set with set(endState,
-//      *    transition). Subsequent calls to set(endState, transition) begin at
-//      *    the last state. Calls to get(timestamp) provide the interpolated state
-//      *    along the way.
-//      *
-//      * Note that there is no event loop here - calls to get() are the only way
-//      *    to find state projected to the current (or provided) time and are
-//      *    the only way to trigger callbacks. Usually this kind of object would
-//      *    be part of the render() path of a visible component.
-//      *
-//      * @class Transitionable
-//      * @constructor
-//      * @param {number|Array.Number|Object.<number|string, number>} start
-//      *    beginning state
-//      */
-//     function Transitionable(start) {
-//         this.currentAction = null;
-//         this.actionQueue = [];
-//         this.callbackQueue = [];
-
-//         this.state = 0;
-//         this.velocity = undefined;
-//         this._callback = undefined;
-//         this._engineInstance = null;
-//         this._currentMethod = null;
-
-//         this.set(start);
-//     }
 
 //     var transitionMethods = {};
 
@@ -86,44 +145,6 @@ test('Transitionable', function(t) {
 //         else return false;
 //     };
 
-//     function _loadNext() {
-//         if (this._callback) {
-//             var callback = this._callback;
-//             this._callback = undefined;
-//             callback();
-//         }
-//         if (this.actionQueue.length <= 0) {
-//             this.set(this.get()); // no update required
-//             return;
-//         }
-//         this.currentAction = this.actionQueue.shift();
-//         this._callback = this.callbackQueue.shift();
-
-//         var method = null;
-//         var endValue = this.currentAction[0];
-//         var transition = this.currentAction[1];
-//         if (transition instanceof Object && transition.method) {
-//             method = transition.method;
-//             if (typeof method === 'string') method = transitionMethods[method];
-//         }
-//         else {
-//             method = TweenTransition;
-//         }
-
-//         if (this._currentMethod !== method) {
-//             if (!(endValue instanceof Object) || method.SUPPORTS_MULTIPLE === true || endValue.length <= method.SUPPORTS_MULTIPLE) {
-//                 this._engineInstance = new method();
-//             }
-//             else {
-//                 this._engineInstance = new MultipleTransition(method);
-//             }
-//             this._currentMethod = method;
-//         }
-
-//         this._engineInstance.reset(this.state, this.velocity);
-//         if (this.velocity !== undefined) transition.velocity = this.velocity;
-//         this._engineInstance.set(endValue, transition, _loadNext.bind(this));
-//     }
 
 //     /**
 //      * Add transition to end state to the queue of pending transitions. Special

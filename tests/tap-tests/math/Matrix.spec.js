@@ -11,10 +11,10 @@ test('Matrix', function(t) {
     });
 
     t.test('get method', function(t) {
-        t.equal(typeof Matrix.prototype.get, 'function', 'Matrix.get should be a function');
+        var matrix = new Matrix();
+        t.equal(typeof matrix.get, 'function', 'matrix.get should be a function');
 
-        var m = new Matrix();
-        t.deepEqual(m.get(), [
+        t.deepEqual(matrix.get(), [
             [1,0,0],
             [0,1,0],
             [0,0,1]
@@ -24,26 +24,23 @@ test('Matrix', function(t) {
     });
 
     t.test('set method', function(t) {
-        t.equal(typeof Matrix.prototype.set, 'function', 'Matrix.set should be a function');
+        var matrix = new Matrix();
+        t.equal(typeof matrix.set, 'function', 'matrix.set should be a function');
 
-        var m = new Matrix();
         var desired = [
             [0.1,0,0],
             [0,0.1,0],
             [0,20,0.1]
         ];
-        m.set(desired);
 
-        t.deepEqual(m.get(), desired, 'Matrix should have previously set state');
-
-        // TODO broken in Famous
-        // should return this
-
+        t.equal(matrix.set(desired), matrix, 'matrix.set should return matrix');
+        t.deepEqual(matrix.get(), desired, 'matrix.set should set state of matrix');
         t.end();
     });
 
     t.test('vectorMultiply method', function(t) {
-        t.equal(typeof Matrix.prototype.set, 'function', 'Matrix.set should be a function');
+        var matrix = new Matrix();
+        t.equal(typeof matrix.set, 'function', 'matrix.set should be a function');
         var vectors = [
             [1, 2, 3],
             [4, 5, 2],
@@ -69,17 +66,18 @@ test('Matrix', function(t) {
             var v = new Vector(vectors[i]);
             var m = new Matrix(matrices[i]);
 
-            t.equal(m.vectorMultiply(v) instanceof Vector, true, 'Matrix.vectorMultiply should return vector');
-            t.deepEqual(m.vectorMultiply(v).get(), results[i], 'Matrix.vectorMultiply should correctly multiply a matrix with a vector');
-            t.deepEqual(m.get(), matrices[i], 'Matrix.vectorMultiply shouldn\'t modifiy original matrix');
-            t.deepEqual(v.get(), vectors[i], 'Matrix.vectorMultiply shouldn\'t modifiy input vector');
+            t.equal(m.vectorMultiply(v) instanceof Vector, true, 'matrix.vectorMultiply should return vector');
+            t.deepEqual(m.vectorMultiply(v).get(), results[i], 'matrix.vectorMultiply should correctly multiply a matrix with a vector');
+            t.deepEqual(m.get(), matrices[i], 'matrix.vectorMultiply shouldn\'t modifiy original matrix');
+            t.deepEqual(v.get(), vectors[i], 'matrix.vectorMultiply shouldn\'t modifiy input vector');
         }
 
         t.end();
     });
 
     t.test('multiply method', function(t) {
-        t.equal(typeof Matrix.prototype.multiply, 'function', 'Matrix.multiply should be a function');
+        var matrix = new Matrix();
+        t.equal(typeof matrix.multiply, 'function', 'matrix.multiply should be a function');
 
         var m = new Matrix([
             [1, 2, 4],
@@ -101,20 +99,15 @@ test('Matrix', function(t) {
 
         // TODO broken in famous
         // console.log(result)
-        // t.deepEqual(m.get(), expected, 'Matrix.multiply should multiply two matrices');
+        // t.deepEqual(m.get(), expected, 'matrix.multiply should multiply two matrices');
 
         t.end();
     });
     
     t.test('transpose method', function(t) {
-        t.equal(typeof Matrix.prototype.transpose, 'function', 'Matrix.transpose should be a function');
+        var matrix = new Matrix();
+        t.equal(typeof matrix.transpose, 'function', 'matrix.transpose should be a function');
 
-        var state = [
-            [1, 2, 23],
-            [1, 9, 32],
-            [1, 34, 1]
-        ];
-        
         var arg = [
             [1, 2, 0],
             [0, 0, 32],
@@ -122,28 +115,27 @@ test('Matrix', function(t) {
         ];
 
         var result = [
-            [1, 2, 3],
-            [1, 9, 2],
-            [1, 34, 1]
+            [1, 0, 0],
+            [0, 1, 0],
+            [0, 0, 1]
         ];
 
         // TODO broken in famous
-        // var m = new Matrix(state);
-        // t.deepEqual(m.transpose(arg), result, 'Matrix.transpose should transpose matrix');
+        t.deepEqual(matrix.transpose(arg).get(), result, 'matrix.transpose should transpose matrix');
 
         t.end();
     });
 
     t.test('clone method', function(t) {
-        t.equal(typeof Matrix.prototype.clone, 'function', 'Matrix.clone should be a function');
+        var matrix = new Matrix();
+        t.equal(typeof matrix.clone, 'function', 'matrix.clone should be a function');
         var state = [
             [31, 12, 23],
             [31, 23, 34],
             [131, 21, 31]
         ];
         var m = new Matrix(state);
-        t.deepEqual(m.clone().get(), state, 'Matrix.clone should return cloned Matrix');
-
+        t.deepEqual(m.clone().get(), state, 'matrix.clone should return cloned Matrix');
         t.end();
     });
 });

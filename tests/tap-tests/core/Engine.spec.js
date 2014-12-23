@@ -146,7 +146,7 @@ test('Engine', function(t) {
 	t.test('registerContext method', function(t) {
 		t.equal(typeof Engine.registerContext, 'function', 'Engine.registerContext should be a function');
 
-		// Context is private. The only way to get an instance of Context is therefore through the Engine.
+		// Context is private. The only way to get an instance of Context is through the Engine.
 
 		var context = Engine.createContext();
 		t.equal(Engine.getContexts().length, 1, 'Engine.registerContext should result into one more context being available through getContexts()');
