@@ -4,7 +4,6 @@ var Context = require('../../../src/core/Context');
 
 test('DesktopEmulationMode', function(t) {
     // TODO not testable, since it can't be reversed
-
     // var event = new MouseEvent('click', {
     //     'view': window,
     //     'bubbles': true,

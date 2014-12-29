@@ -37,7 +37,6 @@ test('EventEmitter', function(t) {
 
         eventEmitter.on('test', listener);
         eventEmitter.emit('test', referenceEvent);
-
         t.equal(eventEmitter.on('boom', function() {}), eventEmitter, 'eventEmitter.on should be chainable');
         eventEmitter.removeListener(listener);
     });
@@ -83,7 +82,7 @@ test('EventEmitter', function(t) {
     		this.pass();
     	};
 
-        eventEmitter.bindThis(that);
+    	eventEmitter.bindThis(that);
     	eventEmitter.on('test', listener);
     	eventEmitter.emit('test');
     	eventEmitter.removeListener('test', listener);
