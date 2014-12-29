@@ -60,7 +60,7 @@ test('EventHandler', function(t) {
     });
 
     t.test('pipe method', function(t) {
-        t.plan(2);
+        t.plan(3);
         var eventHandler = new EventHandler();
         t.equal(typeof eventHandler.pipe, 'function', 'eventHandler.pipe should be a function');
 
@@ -74,10 +74,14 @@ test('EventHandler', function(t) {
             t.equal(receivedEvent, exampleEvent, 'eventHandler.pipe should forward all events to downstream eventHandlers');
         });
         emittingEventHandler.emit('boom', exampleEvent);
+
+        var pipedEventHandler = new EventHandler();
+        var returnValue = eventHandler.pipe(pipedEventHandler);
+        t.equal(returnValue, pipedEventHandler, 'eventHandler.pipe should be chainable');
     });
 
     t.test('unpipe method', function(t) {
-        t.plan(1);
+        t.plan(2);
         var eventHandler = new EventHandler();
         t.equal(typeof eventHandler.unpipe, 'function', 'eventHandler.unpipe should be a function');
 
@@ -92,10 +96,15 @@ test('EventHandler', function(t) {
         });
 
         emittingEventHandler.emit('boom');
+
+        var eventHandler2 = new EventHandler();
+        eventHandler.pipe(eventHandler2);
+        var returnValue = eventHandler.unpipe(eventHandler2);
+        t.equal(returnValue, eventHandler2, 'eventHandler.unpipe should be chainable');
     });
 
     t.test('emit method', function(t) {
-        t.plan(2);
+        t.plan(3);
         var eventHandler = new EventHandler();
         t.equal(typeof eventHandler.emit, 'function', 'eventHandler.emit should be a function');
 
@@ -105,7 +114,10 @@ test('EventHandler', function(t) {
             t.equal(receivedEvent, exampleEvent, 'eventHandler.emit listener function should receive emitted event');
         });
 
-        eventHandler.emit('boom');
+        eventHandler.emit('boom', exampleEvent);
+
+        var returnValue = eventHandler.emit('test', {});
+        t.equal(returnValue, eventHandler, 'eventHandler.emit should be chainable');
     });
 
     t.test('trigger method', function(t) {
@@ -115,8 +127,8 @@ test('EventHandler', function(t) {
         t.equal(eventHandler.trigger, eventHandler.emit, 'eventHandler.trigger should be an alias of eventHandler.emit');
     });
 
-    t.test('on', function(t) {
-        t.plan(4);
+    t.test('on method', function(t) {
+        t.plan(5);
         var eventHandler = new EventHandler();
         t.equal(typeof eventHandler.on, 'function', 'eventHandler.on should be a function');
 
@@ -132,76 +144,54 @@ test('EventHandler', function(t) {
         for (i = 0; i < 3; i++) {
             eventHandler.emit('event' + i, events[i]);
         }
+
+        var returnValue = eventHandler.on('test', function() {});
+        t.equal(returnValue, eventHandler, 'eventHandler.on should be chainable');
     });
 
-    // TODO
+    t.test('addListener method', function(t) {
+        t.plan(2);
+        var eventHandler = new EventHandler();
+        t.equal(typeof eventHandler.addListener, 'function', 'eventHandler.addListener should be a function');
+        t.equal(eventHandler.addListener, eventHandler.on, 'eventHandler.addListener should be an alias of eventHandler.on');
+    });
+
+    t.test('subscribe method', function(t) {
+        t.plan(3);
+        var eventHandler = new EventHandler();
+        t.equal(typeof eventHandler.subscribe, 'function', 'eventHandler.subscribe should be a function');
+
+        var fromEventHandler = new EventHandler();
+        var toEventHandler = new EventHandler();
+        toEventHandler.subscribe(fromEventHandler);
+
+        var exampleEvent = {};
+        toEventHandler.on('boom', function(actualEvent) {
+            t.equal(actualEvent, exampleEvent, 'eventHandler.subscribe should receive all events emitted on subscribed eventHandlers');
+        });
+        fromEventHandler.emit('boom', exampleEvent);
+
+        var returnValue = eventHandler.subscribe(new EventHandler());
+        t.equal(returnValue, eventHandler, 'eventHandler.subscribe should be chainable');
+    });
+
+    t.test('unsubscribe method', function(t) {
+        t.plan(2);
+        var eventHandler = new EventHandler();
+        t.equal(typeof eventHandler.unsubscribe, 'function', 'eventHandler.unsubscribe should be a function');
+
+        var fromEventHandler = new EventHandler();
+        var toEventHandler = new EventHandler();
+
+        fromEventHandler.on('boom', function() {
+            t.fail('eventHandler.unsubscribe should reverse eventHandler.subscribe');
+        });
+
+        fromEventHandler.subscribe(toEventHandler);
+        fromEventHandler.unsubscribe(toEventHandler);
+        toEventHandler.emit('boom');
+
+        var returnValue = eventHandler.unsubscribe(new EventHandler());
+        t.equal(returnValue, eventHandler, 'eventHandler.unsubscribe should be chainable');
+    });
 });
-
-
-//     /**
-//      * Bind a callback function to an event type handled by this object.
-//      *
-//      * @method "on"
-//      *
-//      * @param {string} type event type key (for example, 'click')
-//      * @param {function(string, Object)} handler callback
-//      * @return {EventHandler} this
-//      */
-//     EventHandler.prototype.on = function on(type, handler) {
-//         EventEmitter.prototype.on.apply(this, arguments);
-//         if (!(type in this.upstreamListeners)) {
-//             var upstreamListener = this.trigger.bind(this, type);
-//             this.upstreamListeners[type] = upstreamListener;
-//             for (var i = 0; i < this.upstream.length; i++) {
-//                 this.upstream[i].on(type, upstreamListener);
-//             }
-//         }
-//         return this;
-//     };
-
-//     /**
-//      * Alias for "on"
-//      * @method addListener
-//      */
-//     EventHandler.prototype.addListener = EventHandler.prototype.on;
-
-//     /**
-//      * Listen for events from an upstream event handler.
-//      *
-//      * @method subscribe
-//      *
-//      * @param {EventEmitter} source source emitter object
-//      * @return {EventHandler} this
-//      */
-//     EventHandler.prototype.subscribe = function subscribe(source) {
-//         var index = this.upstream.indexOf(source);
-//         if (index < 0) {
-//             this.upstream.push(source);
-//             for (var type in this.upstreamListeners) {
-//                 source.on(type, this.upstreamListeners[type]);
-//             }
-//         }
-//         return this;
-//     };
-
-//     /**
-//      * Stop listening to events from an upstream event handler.
-//      *
-//      * @method unsubscribe
-//      *
-//      * @param {EventEmitter} source source emitter object
-//      * @return {EventHandler} this
-//      */
-//     EventHandler.prototype.unsubscribe = function unsubscribe(source) {
-//         var index = this.upstream.indexOf(source);
-//         if (index >= 0) {
-//             this.upstream.splice(index, 1);
-//             for (var type in this.upstreamListeners) {
-//                 source.removeListener(type, this.upstreamListeners[type]);
-//             }
-//         }
-//         return this;
-//     };
-
-//     module.exports = EventHandler;
-// });

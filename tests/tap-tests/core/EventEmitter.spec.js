@@ -19,11 +19,12 @@ test('EventEmitter', function(t) {
         t.equal(eventEmitter.emit('test'), eventEmitter, 'eventEmitter.emit should be chainable');
         t.equal(eventEmitter.emit('test', {test: true}), eventEmitter, 'eventEmitter.emit should be chainable');
 
+        t.equal(eventEmitter.emit('boom'), eventEmitter, 'eventEmitter.emit should be chainable');
     	t.end();
     });
 
     t.test('on method', function(t) {
-    	t.plan(3);
+    	t.plan(4);
         var eventEmitter = new EventEmitter();
         t.equal(typeof eventEmitter.on, 'function', 'eventEmitter.on should be a function');
 
@@ -36,6 +37,8 @@ test('EventEmitter', function(t) {
 
         eventEmitter.on('test', listener);
         eventEmitter.emit('test', referenceEvent);
+
+        t.equal(eventEmitter.on('boom', function() {}), eventEmitter, 'eventEmitter.on should be chainable');
         eventEmitter.removeListener(listener);
     });
 
@@ -47,7 +50,7 @@ test('EventEmitter', function(t) {
     });
 
     t.test('removeListener method', function(t) {
-    	t.plan(2);
+    	t.plan(3);
         var eventEmitter = new EventEmitter();
         t.equal(typeof eventEmitter.removeListener, 'function', 'eventEmitter.removeListener should be a function');
 
@@ -62,6 +65,7 @@ test('EventEmitter', function(t) {
 
         eventEmitter.on('test', listener);
         eventEmitter.emit('test');
+        t.equal(eventEmitter.removeListener('boom', function() {}), eventEmitter, 'eventEmitter.removeListener should be chainable');
         eventEmitter.removeListener('test', listener);
     });
 
@@ -79,7 +83,7 @@ test('EventEmitter', function(t) {
     		this.pass();
     	};
 
-    	eventEmitter.bindThis(that);
+        eventEmitter.bindThis(that);
     	eventEmitter.on('test', listener);
     	eventEmitter.emit('test');
     	eventEmitter.removeListener('test', listener);
