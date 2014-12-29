@@ -1,5 +1,8 @@
 var test = require('tape');
 var Transitionable = require('../../../src/transitions/Transitionable');
+var SpringTransition = require('../../../src/transitions/SpringTransition');
+var WallTransition = require('../../../src/transitions/WallTransition');
+var SnapTransition = require('../../../src/transitions/SnapTransition');
 
 test('Transitionable', function(t) {
     t.test('constructor', function(t) {
@@ -23,16 +26,34 @@ test('Transitionable', function(t) {
 
     t.test('register method', function(t) {
 	    t.equal(typeof Transitionable.register, 'function', 'Transitionable.register should be a function');
+
+	    Transitionable.register({
+	    	spring: SpringTransition,
+	    	wall: WallTransition
+	    });
+
+	    t.equal(Transitionable.registerMethod('spring', SpringTransition), false, 'Transitionable.register should work the same as registerMethod');
+	    t.equal(Transitionable.registerMethod('wall', WallTransition), false, 'Transitionable.register should work the same as registerMethod');
+
+	    Transitionable.unregisterMethod('spring');
+	    Transitionable.unregisterMethod('wall');
 	    t.end();
     });
 
     t.test('registerMethod method', function(t) {
 	    t.equal(typeof Transitionable.registerMethod, 'function', 'Transitionable.registerMethod should be a function');
+	    t.equal(Transitionable.registerMethod('spring', SpringTransition), true, 'Transitionable.registerMethod should only work once');
+	    t.equal(Transitionable.registerMethod('spring', SpringTransition), false, 'Transitionable.registerMethod should only work once');
+	    Transitionable.unregisterMethod('spring');
 	    t.end();
     });
 
     t.test('unregisterMethod method', function(t) {
 	    t.equal(typeof Transitionable.unregisterMethod, 'function', 'Transitionable.unregisterMethod should be a function');
+	    Transitionable.registerMethod('spring', SpringTransition);
+	    t.equal(Transitionable.unregisterMethod('spring'), true, 'Transitionable.unregisterMethod should return true if successful');
+	    t.equal(Transitionable.unregisterMethod('spring'), false, 'Transitionable.unregisterMethod should only work once');
+	    t.equal(Transitionable.registerMethod('spring', SpringTransition), true, 'Transitionable.unregisterMethod should reverse Transitionable.registerMethod');
 	    t.end();
     });
 
@@ -116,62 +137,6 @@ test('Transitionable', function(t) {
 });
 
 
-//     var transitionMethods = {};
-
-//     Transitionable.register = function register(methods) {
-//         var success = true;
-//         for (var method in methods) {
-//             if (!Transitionable.registerMethod(method, methods[method]))
-//                 success = false;
-//         }
-//         return success;
-//     };
-
-//     Transitionable.registerMethod = function registerMethod(name, engineClass) {
-//         if (!(name in transitionMethods)) {
-//             transitionMethods[name] = engineClass;
-//             return true;
-//         }
-//         else return false;
-//     };
-
-//     Transitionable.unregisterMethod = function unregisterMethod(name) {
-//         if (name in transitionMethods) {
-//             delete transitionMethods[name];
-//             return true;
-//         }
-//         else return false;
-//     };
-
-
-//     /**
-//      * Add transition to end state to the queue of pending transitions. Special
-//      *    Use: calling without a transition resets the object to that state with
-//      *    no pending actions
-//      *
-//      * @method set
-//      *
-//      * @param {number|FamousMatrix|Array.Number|Object.<number, number>} endState
-//      *    end state to which we interpolate
-//      * @param {transition=} transition object of type {duration: number, curve:
-//      *    f[0,1] -> [0,1] or name}. If transition is omitted, change will be
-//      *    instantaneous.
-//      * @param {function()=} callback Zero-argument function to call on observed
-//      *    completion (t=1)
-//      */
-//     Transitionable.prototype.set = function set(endState, transition, callback) {
-//         if (!transition) {
-//             this.reset(endState);
-//             if (callback) callback();
-//             return this;
-//         }
-
-//         var action = [endState, transition];
-//         this.actionQueue.push(action);
-//         this.callbackQueue.push(callback);
-//         if (!this.currentAction) _loadNext.call(this);
-//         return this;
-//     };
 
 //     /**
 //      * Cancel all transitions and reset to a stable state
