@@ -5,7 +5,7 @@
 
 ## Conventions
 
-# General Notes
+### General Notes
 
 * each assertion **needs** a message
 * try to be as specific as possible
@@ -15,7 +15,7 @@
 * Don't test **internals**, **private methods** or **private classes**
   (I'm looking at you, Context.js)
 
-# Testing existence of methods
+### Testing existence of methods
 
 **good**
 
@@ -42,3 +42,21 @@ Don't test if methods are on the prototype. The constructor *might*
 The second test is testing something different than what it
 wants us to believe: `Matrix.transpose` is actually not being tested,
 neither should it.
+
+### Untestable code
+
+Currently, there are parts of famous that are very hard to test, e.g.
+DesktopEmulationMode. Since every attempt to test those components would any
+further tests impossible, they are not being tested.
+
+TODO Fixing this in core is probably a good idea. Something like jQuery's
+noConflict method would be a reasonable solution
+
+### Visual tests
+
+Currently visual tests are not implemented (although they are really needed).
+
+
+Options for visual regression tests (just some ideas):
+
+* CasperJS's `capture` method
