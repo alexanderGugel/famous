@@ -85,21 +85,23 @@ test('Transitionable', function(t) {
 	    t.end();
     });
 
-  //   t.test('isActive method', function(t) {
-  //   	t.plan(4);
-	 //    t.equal(typeof Transitionable.prototype.isActive, 'function', 'Transitionable.isActive should be a function');
+    t.test('isActive method', function(t) {
+    	t.plan(1);
+        var transitionable = new Transitionable();
+	    t.equal(typeof transitionable.isActive, 'function', 'transitionable.isActive should be a function');
 
-	 //    var transitionable = new Transitionable(0);
-	 //    t.notOk(transitionable.isActive());
+	    // var transitionable = new Transitionable(0);
+	    // t.notOk(transitionable.isActive());
 
-	 //    transitionable.set(1, { duration: 100 }, function() {
-	 //    	console.log('boom');
+	    // transitionable.set(1, { duration: 100 }, function() {
+	    // 	console.log('boom');
 		//     t.notOk(transitionable.isActive());
-	 //    });
+	    // });
 		// t.ok(transitionable.isActive());
-  //   });
+    });
 
     t.test('halt method', function(t) {
+        t.plan(2);
 		var transitionable = new Transitionable();
 	    t.equal(typeof transitionable.halt, 'function', 'transitionable.halt should be a function');
 
@@ -108,9 +110,8 @@ test('Transitionable', function(t) {
 
 	    setTimeout(function() {
 		    transitionable.halt()
-		    t.equal(Math.round(transitionable.get()*100), 0.5*100, 'transitionable.halt should halt transition');
+		    t.equal(~~(0.5 - transitionable.get()), 0, 'transitionable.halt should halt transition');
 	    }, 250);
-	    t.end();
     });
 });
 

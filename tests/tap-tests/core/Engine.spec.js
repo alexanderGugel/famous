@@ -1,30 +1,29 @@
 var test = require('tape');
 var Engine = require('../../../src/core/Engine');
 var Context = require('../../../src/core/Context');
+var EventHandler = require('../../../src/core/EventHandler');
 
 // The following tests aren't really unit tests, since Engine is a singleton and needs to be cleaned up afer each test.
 // This leads to the usage of deregisterContext, which is assumed to be working.
 test('Engine', function(t) {
-	t.test('pipe method', function (t) {
-		t.equal(typeof Engine.unpipe, 'function', 'Engine.pipe should be a function');
-
-		// Delegates to EventHandler, no need to test here
-
-		t.end();
-	});
-
-	t.test('unpipe method', function(t) {
+	t.test('pipe and unpipe method', function (t) {
+		t.plan(3);
+		t.equal(typeof Engine.pipe, 'function', 'Engine.pipe should be a function');
 		t.equal(typeof Engine.unpipe, 'function', 'Engine.unpipe should be a function');
 
-		// Delegates to EventHandler, no need to test here
+		var eventHandler = new EventHandler();
+		eventHandler.on('prerender', function() {
+			t.pass('Engine should pipe prerender event through all downstream eventHandlers');
+			Engine.unpipe(eventHandler);
+		});
 
-		t.end();
+		Engine.pipe(eventHandler);
 	});
 
 	t.test('on method', function(t) {
 		t.equal(typeof Engine.on, 'function', 'Engine.on should be a function');
 
-		Engine.on('blabla', function () {
+		Engine.on('blabla', function() {
 			t.pass('Engine.on should invoke function when event is has been emitted');
 		});
 
@@ -88,21 +87,23 @@ test('Engine', function(t) {
 
 		Engine.setFPSCap(10);
 
-		setTimeout(function() {
-			t.ok((10 - Engine.getFPS()) < 3);
-
+		Engine.defer(function() {
+			t.ok((10 - Engine.getFPS()) < 3, 'Engine.setFPSCap should set the maximum framerate of what Engine.getFPS() returns');
 			Engine.removeFPSCap();
-		}, 100);
+		});
 	});
 
 	t.test('removeFPSCap method', function(t) {
+		t.plan(1);
 		Engine.setFPSCap(10);
-		Engine.removeFPSCap();
-		t.notEqual(Engine.getFPS(), 10, 'Engine.removeFPSCap should remove previously set FPS cap');
-
-		t.end();
+		Engine.nextTick(function() {
+			Engine.removeFPSCap();
+			Engine.nextTick(function() {
+				t.notEqual(Engine.getFPS(), 10, 'Engine.removeFPSCap should remove previously set FPS cap');
+			});
+		});
 	});
-	
+
 	t.test('getOptions method', function(t) {
 		t.equal(typeof Engine.getOptions, 'function', 'Engine.getOptions should be a function');
 
@@ -169,7 +170,7 @@ test('Engine', function(t) {
 		t.equal(Engine.getContexts().length, 1, 'Engine.deregisterContext needs one context before it can be deregistered');
 
 		Engine.deregisterContext(context);
-		t.equal(Engine.getContexts().length, 0, 'Engine.deregisterContext should result into one less context to be returned by getContexts');	
+		t.equal(Engine.getContexts().length, 0, 'Engine.deregisterContext should result into one less context to be returned by getContexts');
 
 		t.end();
 	});

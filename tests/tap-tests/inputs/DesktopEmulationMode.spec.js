@@ -3,8 +3,8 @@ var Engine = require('../../../src/core/Engine');
 var Context = require('../../../src/core/Context');
 
 test('DesktopEmulationMode', function(t) {
-    // TODO Testing this is not hard, reversing it is
-    
+    // TODO not testable, since it can't be reversed
+
     // var event = new MouseEvent('click', {
     //     'view': window,
     //     'bubbles': true,
