@@ -7,7 +7,7 @@ test('EventHandler', function(t) {
         t.equal(typeof EventHandler, 'function', 'EventHandler should be a function');
 
         t.doesNotThrow(function() {
-	        var eventHandler = new EventHandler();
+            var eventHandler = new EventHandler();
         }, 'EventHandler constructor should not throw an error');
 
         t.end();
