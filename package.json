@@ -11,7 +11,7 @@
   ],
   "scripts": {
     "tap-tests": "prova -t provify ./tests/tap-tests/**/*.spec.js -b",
-    "visual-tests": "slimerjs tests/visual-tests/index.js",
+    "visual-tests": "node tests/visual-tests/index.js",
     "test": "npm run lint -s",
     "lint-eslint": "eslint src/",
     "lint-jscs": "jscs src/",
