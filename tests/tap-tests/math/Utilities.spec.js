@@ -1,6 +1,6 @@
 var test = require('tape');
 var Utilities = require('../../../src/math/Utilities');
-var TypeList = require('../../utilities/TypeList');
+var TypeList = require('../../helpers/TypeList');
 
 test('Utilities', function(t) {
     t.test('clamp method', function(t) {

@@ -58,6 +58,7 @@ test('Transitionable', function(t) {
     });
 
     t.test('set method', function(t) {
+    	t.plan(5);
 		var transitionable = new Transitionable();
 	    t.equal(typeof transitionable.set, 'function', 'transitionable.set should be a function');
 
@@ -70,55 +71,68 @@ test('Transitionable', function(t) {
 	    transitionable.set(2);
 	    t.equal(transitionable.get(), 2, 'Transitionable.set should set state');
 
-	    t.end();
+	    // TODO broken in current famous
+	    var callback = function() {
+	    	t.pass('Transitionable.set should accept and invoke callback function');
+	    };
+
+	    transitionable.set(4, undefined, callback);
+	    transitionable.set(4, { duration: 500 }, callback);
     });
 
     t.test('reset method', function(t) {
 		var transitionable = new Transitionable();
 	    t.equal(typeof transitionable.reset, 'function', 'transitionable.reset should be a function');
 
-	    // TODO
 	    var transitionable = new Transitionable();
 	    transitionable.set(0);
-	    // transitionable.reset();
-	    // t.equal(transitionable.get(), 0, 'Transitionable.reset should reset state if transition is active');
-
-	    // transitionable.set(1, { duration: 100 });
-
-	    // transitionable.reset();
-	    // t.equal(transitionable.get(), 0, 'Transitionable.reset should reset state');
+	    transitionable.set(1, { duration: 500 });
+	    transitionable.reset();
+	    t.equal(transitionable.get(), undefined, 'Transitionable.reset should reset state if transition is active');
 
 	    t.end();
     });
 
     t.test('delay method', function(t) {
+    	t.plan(3);
 		var transitionable = new Transitionable();
 	    t.equal(typeof transitionable.delay, 'function', 'transitionable.delay should be a function');
 
-	    var transitionable = new Transitionable(0);
-	    transitionable
-	    t.end();
+	    // TODO Bug in famous. Doesn't work when using duration.
+	    var transitionable = new Transitionable();
+	    transitionable.set(0);
+	    transitionable.delay(500);
+    	t.equal(transitionable.get(), 0, 'transitionable.delay should delay the execution of the action queue');
+	    transitionable.set(1);
+	    setTimeout(function() {
+	    	t.equal(transitionable.get(), 1, 'transitionable.delay should delay the execution of the action queue');
+	    }, 1000);
     });
 
     t.test('get method', function(t) {
 		var transitionable = new Transitionable();
 	    t.equal(typeof transitionable.get, 'function', 'transitionable.get should be a function');
+	    transitionable.set(4);
+	    t.equal(transitionable.get(), 4, 'transitionable.get should return previously set value');
+	    transitionable.set(2);
+	    t.equal(transitionable.get(), 2, 'transitionable.get should return previously set value');
 	    t.end();
     });
 
     t.test('isActive method', function(t) {
-    	t.plan(1);
+    	t.plan(4);
         var transitionable = new Transitionable();
 	    t.equal(typeof transitionable.isActive, 'function', 'transitionable.isActive should be a function');
 
-	    // var transitionable = new Transitionable(0);
-	    // t.notOk(transitionable.isActive());
+	    var transitionable = new Transitionable(0);
+	    t.equal(transitionable.isActive(), false, 'transitionable.isActive should return false if transition is not active');
 
-	    // transitionable.set(1, { duration: 100 }, function() {
-	    // 	console.log('boom');
-		//     t.notOk(transitionable.isActive());
-	    // });
-		// t.ok(transitionable.isActive());
+	    transitionable.set(1, { duration: 100 });
+        t.equal(transitionable.isActive(), true, 'transitionable.isActive should return true if transition is active');
+
+        // TODO Bug in famous - doesn't work when using setTimeout and not halting the transitionable
+    	transitionable.halt();
+    	t.equal(transitionable.isActive(), false, 'transitionable.isActive should return false if transition is not active');
     });
 
     t.test('halt method', function(t) {
@@ -135,85 +149,3 @@ test('Transitionable', function(t) {
 	    }, 250);
     });
 });
-
-
-
-//     /**
-//      * Cancel all transitions and reset to a stable state
-//      *
-//      * @method reset
-//      *
-//      * @param {number|Array.Number|Object.<number, number>} startState
-//      *    stable state to set to
-//      */
-//     Transitionable.prototype.reset = function reset(startState, startVelocity) {
-//         this._currentMethod = null;
-//         this._engineInstance = null;
-//         this._callback = undefined;
-//         this.state = startState;
-//         this.velocity = startVelocity;
-//         this.currentAction = null;
-//         this.actionQueue = [];
-//         this.callbackQueue = [];
-//     };
-
-//     /**
-//      * Add delay action to the pending action queue queue.
-//      *
-//      * @method delay
-//      *
-//      * @param {number} duration delay time (ms)
-//      * @param {function} callback Zero-argument function to call on observed
-//      *    completion (t=1)
-//      */
-//     Transitionable.prototype.delay = function delay(duration, callback) {
-//         this.set(this.get(), {duration: duration,
-//             curve: function() {
-//                 return 0;
-//             }},
-//             callback
-//         );
-//     };
-
-//     /**
-//      * Get interpolated state of current action at provided time. If the last
-//      *    action has completed, invoke its callback.
-//      *
-//      * @method get
-//      *
-//      * @param {number=} timestamp Evaluate the curve at a normalized version of this
-//      *    time. If omitted, use current time. (Unix epoch time)
-//      * @return {number|Object.<number|string, number>} beginning state
-//      *    interpolated to this point in time.
-//      */
-//     Transitionable.prototype.get = function get(timestamp) {
-//         if (this._engineInstance) {
-//             if (this._engineInstance.getVelocity)
-//                 this.velocity = this._engineInstance.getVelocity();
-//             this.state = this._engineInstance.get(timestamp);
-//         }
-//         return this.state;
-//     };
-
-//     /**
-//      * Is there at least one action pending completion?
-//      *
-//      * @method isActive
-//      *
-//      * @return {boolean}
-//      */
-//     Transitionable.prototype.isActive = function isActive() {
-//         return !!this.currentAction;
-//     };
-
-//     /**
-//      * Halt transition at current state and erase all pending actions.
-//      *
-//      * @method halt
-//      */
-//     Transitionable.prototype.halt = function halt() {
-//         return this.set(this.get());
-//     };
-
-//     module.exports = Transitionable;
-// });

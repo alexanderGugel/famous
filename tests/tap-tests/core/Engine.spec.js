@@ -79,28 +79,28 @@ test('Engine', function(t) {
 		t.end();
 	});
 
-	t.test('setFPSCap method', function(t) {
-		t.plan(2);
-		t.equal(typeof Engine.setFPSCap, 'function', 'Engine.setFPSCap should be a function');
+	// t.test('setFPSCap method', function(t) {
+	// 	t.plan(2);
+	// 	t.equal(typeof Engine.setFPSCap, 'function', 'Engine.setFPSCap should be a function');
 
-		Engine.setFPSCap(10);
+	// 	Engine.setFPSCap(10);
 
-		setTimeout(function() {
-			t.ok((10 - Engine.getFPS()) < 3, 'Engine.setFPSCap should set the maximum framerate of what Engine.getFPS() returns');
-			Engine.removeFPSCap();
-		}, 1000);
-	});
+	// 	setTimeout(function() {
+	// 		t.ok((10 - Engine.getFPS()) < 3, 'Engine.setFPSCap should set the maximum framerate of what Engine.getFPS() returns');
+	// 		Engine.removeFPSCap();
+	// 	}, 1000);
+	// });
 
-	t.test('removeFPSCap method', function(t) {
-		t.plan(1);
-		Engine.setFPSCap(10);
-		setTimeout(function() {
-			Engine.removeFPSCap();
-			setTimeout(function() {
-				t.notEqual(Engine.getFPS(), 10, 'Engine.removeFPSCap should remove previously set FPS cap');
-			}, 1000);
-		}, 1000);
-	});
+	// t.test('removeFPSCap method', function(t) {
+	// 	t.plan(1);
+	// 	Engine.setFPSCap(10);
+	// 	setTimeout(function() {
+	// 		Engine.removeFPSCap();
+	// 		setTimeout(function() {
+	// 			t.notEqual(Engine.getFPS(), 10, 'Engine.removeFPSCap should remove previously set FPS cap');
+	// 		}, 1000);
+	// 	}, 1000);
+	// });
 
 	t.test('getOptions method', function(t) {
 		t.equal(typeof Engine.getOptions, 'function', 'Engine.getOptions should be a function');

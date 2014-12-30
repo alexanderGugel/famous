@@ -1,6 +1,6 @@
 var test = require('tape');
 var Vector = require('../../../src/math/Vector');
-// var TypeList = require('../../utilities/TypeList');
+// var TypeList = require('../../helpers/TypeList');
 
 test('Vector', function(t) {
     t.test('constructor', function(t) {

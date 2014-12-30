@@ -195,4 +195,3 @@ test('EventHandler', function(t) {
         t.equal(returnValue, eventHandler, 'eventHandler.unsubscribe should be chainable');
     });
 });
-
