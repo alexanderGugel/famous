@@ -1,19 +1,17 @@
-var fs = require('fs');
-var path = require('path');
-var browserify = require('browserify');
+// var st = require('st')
+// var http = require('http')
+// var page = require('webpage').create();
 
-var scenarios = fs.readdirSync(path.join(__dirname, '/scenarios'));
+// var server = http.createServer(
+//   st({ path: __dirname, cache: false })
+// );
 
-function bundleScenario(filename) {
-    var b = browserify();
-    b.add(path.join(__dirname, '/scenarios/', filename));
-    var writeStream = fs.createWriteStream(
-        path.join(__dirname, '/scenarios/', filename.replace('.js', '.bundle.js'))
-    );
-    b.bundle().pipe(writeStream);
-}
+// server.listen(1337);
 
-scenarios.filter(function(filename) {
-    return filename.match(/\.bundle\.js/) === null;
-}).forEach(bundleScenario);
+var casper = require('casper').create();
 
+casper.start('index.html#simple.bundle.js', function() {
+    this.echo(this.getTitle());
+});
+
+casper.run();

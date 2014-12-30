@@ -7,7 +7,7 @@ var Surface = require('../../../src/core/Surface');
 
 var surface = new Surface({
 	properties: {
-		background: 'red'
+		background: 'blue'
 	}
 });
 
