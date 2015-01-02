@@ -18,7 +18,7 @@ test('Transitionable', function(t) {
 
         args.forEach(function(arg) {
         	var transitionable = new Transitionable(arg);
-        	t.equal(transitionable.get(), arg, 'Engine constructor should set intial state');
+        	t.equal(transitionable.get(), arg, 'Transitionable constructor should set intial state');
         });
 
         t.end();

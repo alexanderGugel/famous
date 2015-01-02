@@ -4,6 +4,7 @@ var TransitionableTransform = require('../../../src/transitions/TransitionableTr
 test('TransitionableTransform', function(t) {
     t.test('constructor', function(t) {
         t.equal(typeof TransitionableTransform, 'function', 'TransitionableTransform should be a function');
+
         t.end();
     });
 
@@ -12,7 +13,6 @@ test('TransitionableTransform', function(t) {
         var transitionableTransform = new TransitionableTransform();
         t.equal(typeof transitionableTransform.setTranslate, 'function', 'transitionableTransform.setTranslate should be a function');
 
-        // TODO callback is never being called
         var callback = function() {
             t.pass('transitionableTransform.setTranslate should accept and invoke callback function')
         };
@@ -24,6 +24,11 @@ test('TransitionableTransform', function(t) {
             t.deepEqual(transitionableTransform.get(), [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 4, 5, 6, 1], 'transitionableTransform.setTranslate should correctly build the transform matrix');
         }, 600);
     });
+
+    t.test('multiple transitions', function(t) {
+        var transitionableTransform = new TransitionableTransform();
+        t.end();
+    })
 
 
 
