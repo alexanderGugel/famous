@@ -4,7 +4,7 @@ var Context = require('../../../src/core/Context');
 var EventHandler = require('../../../src/core/EventHandler');
 
 test('Engine', function(t) {
-	t.test('pipe and unpipe method', function (t) {
+	t.test('pipe and unpipe method', function(t) {
 		t.plan(3);
 		t.equal(typeof Engine.pipe, 'function', 'Engine.pipe should be a function');
 		t.equal(typeof Engine.unpipe, 'function', 'Engine.unpipe should be a function');
