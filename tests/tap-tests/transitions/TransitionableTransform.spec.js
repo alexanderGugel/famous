@@ -1,6 +1,12 @@
 var test = require('tape');
 var TransitionableTransform = require('../../../src/transitions/TransitionableTransform');
 
+function _almost(array) {
+    return array.map(function(number) {
+        return Math.round(number*1000)/1000;
+    });
+}
+
 test('TransitionableTransform', function(t) {
     t.test('constructor', function(t) {
         t.equal(typeof TransitionableTransform, 'function', 'TransitionableTransform should be a function');
@@ -17,198 +23,73 @@ test('TransitionableTransform', function(t) {
             t.pass('transitionableTransform.setTranslate should accept and invoke callback function')
         };
 
-        transitionableTransform.setTranslate([1, 2, 3]);
-        t.deepEqual(transitionableTransform.get(), [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 1, 2, 3, 1], 'transitionableTransform.setTranslate should correctly build the transform matrix');
-        transitionableTransform.setTranslate([4, 5, 6], { duration: 500 }, callback);
+        transitionableTransform.setTranslate(_almost([1, 2, 3]));
+        t.deepEqual(_almost(transitionableTransform.get()), _almost([1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 1, 2, 3, 1]), 'transitionableTransform.setTranslate should correctly build the transform matrix');
+        transitionableTransform.setTranslate(_almost([4, 5, 6]), { duration: 50 }, callback);
         setTimeout(function() {
-            t.deepEqual(transitionableTransform.get(), [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 4, 5, 6, 1], 'transitionableTransform.setTranslate should correctly build the transform matrix');
-        }, 600);
+            t.deepEqual(_almost(transitionableTransform.get()), _almost([1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 4, 5, 6, 1]), 'transitionableTransform.setTranslate should correctly build the transform matrix');
+        }, 100);
+    });
+
+    t.test('setScale method', function(t) {
+        t.plan(3);
+        var transitionableTransform = new TransitionableTransform();
+        t.equal(typeof transitionableTransform.setScale, 'function', 'transitionableTransform.setScale should be a function');
+
+        var callback = function() {
+            t.pass('transitionableTransform.setScale should accept and invoke callback function')
+        };
+
+        transitionableTransform.setScale(_almost([1, 2, 3]));
+        t.deepEqual(_almost(transitionableTransform.get()), _almost([1, 0, 0, 0, 0, 2, 0, 0, 0, 0, 3, 0, 0, 0, 0, 1]), 'transitionableTransform.setScale should correctly build the transform matrix');
+        transitionableTransform.setScale(_almost([4, 5, 6]), { duration: 50 }, callback);
+        setTimeout(function() {
+            t.deepEqual(_almost(transitionableTransform.get()), _almost([4, 0, 0, 0, 0, 5, 0, 0, 0, 0, 6, 0, 0, 0, 0, 1]), 'transitionableTransform.setScale should correctly build the transform matrix');
+        }, 100);
+    });
+
+    t.test('setRotate method', function(t) {
+        t.plan(3);
+        var transitionableTransform = new TransitionableTransform();
+        t.equal(typeof transitionableTransform.setRotate, 'function', 'transitionableTransform.setRotate should be a function');
+
+        var callback = function() {
+            t.pass('transitionableTransform.setRotate should accept and invoke callback function')
+        };
+
+        transitionableTransform.setRotate(_almost([Math.PI, Math.PI*0.5, Math.PI*0.3]));
+        t.deepEqual(_almost(transitionableTransform.get()), _almost([3.599146639029984e-17, -0.8090169943749472, 0.5877852522924734, 0, -4.9538003630854574e-17, -0.5877852522924734, -0.8090169943749472, 0, 1, -7.498798913309288e-33, -6.123233995736766e-17, 0, 0, 0, 0, 1]), 'transitionableTransform.setRotate should correctly build the transform matrix');
+        transitionableTransform.setRotate(_almost([4, 5, 6]), { duration: 100 }, callback);
+        setTimeout(function() {
+            t.deepEqual(_almost(transitionableTransform.get()), _almost([0.2723640019280953, 0.8794493702846053, -0.39036733413507296, 0, 0.07925961087140349, -0.4248328058013977, -0.9017954320129513, 0, -0.9589242746631385, 0.21467624978306998, -0.18541397800826867, 0, 0, 0, 0, 1]), 'transitionableTransform.setRotate should correctly build the transform matrix');
+        }, 200);
+    });
+
+    t.test('setSkew method', function(t) {
+        t.plan(3);
+        var transitionableTransform = new TransitionableTransform();
+        t.equal(typeof transitionableTransform.setSkew, 'function', 'transitionableTransform.setSkew should be a function');
+
+        var callback = function() {
+            t.pass('transitionableTransform.setSkew should accept and invoke callback function')
+        };
+
+        transitionableTransform.setSkew(_almost([1, 2, 3]));
+        t.deepEqual(_almost(transitionableTransform.get()), _almost([1, -2.185039863261519, 0, 0, -0.1425465430742778, 1, 0, 0, 0, 1.557407724654902, 1, 0, 0, 0, 0, 1]), 'transitionableTransform.setSkew should correctly build the transform matrix');
+        transitionableTransform.setSkew(_almost([4, 5, 6]), { duration: 50 }, callback);
+        setTimeout(function() {
+            t.deepEqual(_almost(transitionableTransform.get()), _almost([1, -3.380515006246585, 0, 0, -0.29100619138474915, 1, 0, 0, 0, 1.1578212823495775, 1, 0, 0, 0, 0, 1]), 'transitionableTransform.setSkew should correctly build the transform matrix');
+        }, 100);
     });
 
     t.test('multiple transitions', function(t) {
-        var transitionableTransform = new TransitionableTransform();
+        var transitionableTransform;
+        transitionableTransform = new TransitionableTransform();
+
+        
+
+
+
         t.end();
-    })
-
-
-
+    });
 });
-
-//     function TransitionableTransform(transform) {
-//         this._final = Transform.identity.slice();
-
-//         this._finalTranslate = [0, 0, 0];
-//         this._finalRotate = [0, 0, 0];
-//         this._finalSkew = [0, 0, 0];
-//         this._finalScale = [1, 1, 1];
-
-//         this.translate = new Transitionable(this._finalTranslate);
-//         this.rotate = new Transitionable(this._finalRotate);
-//         this.skew = new Transitionable(this._finalSkew);
-//         this.scale = new Transitionable(this._finalScale);
-
-//         if (transform) this.set(transform);
-//     }
-
-//     TransitionableTransform.prototype.setTranslate = function setTranslate(translate, transition, callback) {
-//         this._finalTranslate = translate;
-//         this._final = _buildFinal.call(this);
-//         this.translate.set(translate, transition, callback);
-//         return this;
-//     };
-
-//     /**
-//      * An optimized way of setting only the scale component of a Transform
-//      *
-//      * @method setScale
-//      * @chainable
-//      *
-//      * @param scale {Array}         New scale state
-//      * @param [transition] {Object} Transition definition
-//      * @param [callback] {Function} Callback
-//      * @return {TransitionableTransform}
-//      */
-//     TransitionableTransform.prototype.setScale = function setScale(scale, transition, callback) {
-//         this._finalScale = scale;
-//         this._final = _buildFinal.call(this);
-//         this.scale.set(scale, transition, callback);
-//         return this;
-//     };
-
-//     /**
-//      * An optimized way of setting only the rotational component of a Transform
-//      *
-//      * @method setRotate
-//      * @chainable
-//      *
-//      * @param eulerAngles {Array}   Euler angles for new rotation state
-//      * @param [transition] {Object} Transition definition
-//      * @param [callback] {Function} Callback
-//      * @return {TransitionableTransform}
-//      */
-//     TransitionableTransform.prototype.setRotate = function setRotate(eulerAngles, transition, callback) {
-//         this._finalRotate = eulerAngles;
-//         this._final = _buildFinal.call(this);
-//         this.rotate.set(eulerAngles, transition, callback);
-//         return this;
-//     };
-
-//     /**
-//      * An optimized way of setting only the skew component of a Transform
-//      *
-//      * @method setSkew
-//      * @chainable
-//      *
-//      * @param skewAngles {Array}    New skew state
-//      * @param [transition] {Object} Transition definition
-//      * @param [callback] {Function} Callback
-//      * @return {TransitionableTransform}
-//      */
-//     TransitionableTransform.prototype.setSkew = function setSkew(skewAngles, transition, callback) {
-//         this._finalSkew = skewAngles;
-//         this._final = _buildFinal.call(this);
-//         this.skew.set(skewAngles, transition, callback);
-//         return this;
-//     };
-
-//     /**
-//      * Setter for a TransitionableTransform with optional parameters to transition
-//      * between Transforms
-//      *
-//      * @method set
-//      * @chainable
-//      *
-//      * @param transform {Array}     New transform state
-//      * @param [transition] {Object} Transition definition
-//      * @param [callback] {Function} Callback
-//      * @return {TransitionableTransform}
-//      */
-//     TransitionableTransform.prototype.set = function set(transform, transition, callback) {
-//         var components = Transform.interpret(transform);
-
-//         this._finalTranslate = components.translate;
-//         this._finalRotate = components.rotate;
-//         this._finalSkew = components.skew;
-//         this._finalScale = components.scale;
-//         this._final = transform;
-
-//         var _callback = callback ? Utility.after(4, callback) : null;
-//         this.translate.set(components.translate, transition, _callback);
-//         this.rotate.set(components.rotate, transition, _callback);
-//         this.skew.set(components.skew, transition, _callback);
-//         this.scale.set(components.scale, transition, _callback);
-//         return this;
-//     };
-
-//     /**
-//      * Sets the default transition to use for transitioning betwen Transform states
-//      *
-//      * @method setDefaultTransition
-//      *
-//      * @param transition {Object} Transition definition
-//      */
-//     TransitionableTransform.prototype.setDefaultTransition = function setDefaultTransition(transition) {
-//         this.translate.setDefault(transition);
-//         this.rotate.setDefault(transition);
-//         this.skew.setDefault(transition);
-//         this.scale.setDefault(transition);
-//     };
-
-//     /**
-//      * Getter. Returns the current state of the Transform
-//      *
-//      * @method get
-//      *
-//      * @return {Transform}
-//      */
-//     TransitionableTransform.prototype.get = function get() {
-//         if (this.isActive()) {
-//             return _build.call(this);
-//         }
-//         else return this._final;
-//     };
-
-//     /**
-//      * Get the destination state of the Transform
-//      *
-//      * @method getFinal
-//      *
-//      * @return Transform {Transform}
-//      */
-//     TransitionableTransform.prototype.getFinal = function getFinal() {
-//         return this._final;
-//     };
-
-//     /**
-//      * Determine if the TransitionalTransform is currently transitioning
-//      *
-//      * @method isActive
-//      *
-//      * @return {Boolean}
-//      */
-//     TransitionableTransform.prototype.isActive = function isActive() {
-//         return this.translate.isActive() || this.rotate.isActive() || this.scale.isActive() || this.skew.isActive();
-//     };
-
-//     /**
-//      * Halts the transition
-//      *
-//      * @method halt
-//      */
-//     TransitionableTransform.prototype.halt = function halt() {
-//         this.translate.halt();
-//         this.rotate.halt();
-//         this.skew.halt();
-//         this.scale.halt();
-
-//         this._final = this.get();
-//         this._finalTranslate = this.translate.get();
-//         this._finalRotate = this.rotate.get();
-//         this._finalSkew = this.skew.get();
-//         this._finalScale = this.scale.get();
-
-//         return this;
-//     };
-
-//     module.exports = TransitionableTransform;
-// });

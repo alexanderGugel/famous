@@ -32,6 +32,7 @@ MockSync.getMockSyncs = function() {
     return mockSyncs.slice();
 };
 
+// now for the tricky part
 MockSync.createConstructor = function() {
     function MockSyncClass() {
         MockSync.call(this);

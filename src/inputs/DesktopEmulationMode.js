@@ -1,6 +1,4 @@
 define(function(require, exports, module) {
-    var hasTouch = 'ontouchstart' in window;
-
     function kill(type) {
         window.addEventListener(type, function(event) {
             event.stopPropagation();
@@ -8,10 +6,8 @@ define(function(require, exports, module) {
         }, true);
     }
 
-    if (hasTouch) {
-        kill('mousedown');
-        kill('mousemove');
-        kill('mouseup');
-        kill('mouseleave');
-    }
+    kill('mousedown');
+    kill('mousemove');
+    kill('mouseup');
+    kill('mouseleave');
 });
