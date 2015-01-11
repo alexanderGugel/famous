@@ -1,6 +1,4 @@
 var test = require('tape');
-var Engine = require('../../../src/core/Engine');
-var Context = require('../../../src/core/Context');
 
 function _createEvent(eventName) {
     return new MouseEvent(eventName, {

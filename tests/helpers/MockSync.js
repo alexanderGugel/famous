@@ -6,7 +6,7 @@ function MockSync() {
     EventHandler.call(this);
     mockSyncs.push(this);
 
-    this._eventInput = new EventHandler();
+    this._eventInput  = new EventHandler();
     this._eventOutput = new EventHandler();
 
     EventHandler.setInputHandler(this, this._eventInput);

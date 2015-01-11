@@ -71,29 +71,36 @@ test('GenericSync', function(t) {
         t.equal(typeof genericSync.pipeSync, 'function', 'genericSync.pipeSync should be a function');
 
         var syncObject = {
-            bla: MockSync.createConstructor(),
+            // bla: MockSync.createConstructor(),
+            blub: MockSync.createConstructor(),
         };
 
         GenericSync.register(syncObject);
-        genericSync.addSync(['bla']);
-
-        genericSync.pipeSync('bla');
+        genericSync.addSync(['blub']);
+        genericSync.pipeSync('blub');
 
         var mockSyncs = MockSync.getMockSyncs();
-        var blaSync = mockSyncs[mockSyncs.length - 1];
+        // var blaSync = mockSyncs[mockSyncs.length - 1];
+        var blubSync = mockSyncs[mockSyncs.length - 1];
 
-        blaSync._eventInput.on('test', function() {
+        blubSync.on('update', function() {
             t.pass('genericSync.pipeSync should pipe all events to sync');
         });
 
-        // TODO
+        genericSync._eventInput.emit('update', {});
 
+        // blaSync.emitUpdate();
+
+        // blubSync.emitUpdate();
+
+        // TODO
     });
 
     t.test('unpipeSync method', function(t) {
         t.plan(1);
         var genericSync = new GenericSync();
         t.equal(typeof genericSync.unpipeSync, 'function', 'genericSync.unpipeSync should be a function');
+
 
         // TODO
     });
