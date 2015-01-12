@@ -1,9 +1,7 @@
 // 50% DONE
-// TODO MockTwoFingerSync, event format
+// TODO event format
 
 var test = require('tape');
-var Time = require('../../helpers/Time');
-Time.set(0);
 var RotateSync = require('../../../src/inputs/RotateSync');
 
 test('RotateSync', function(t) {
@@ -12,49 +10,57 @@ test('RotateSync', function(t) {
         t.equal(typeof RotateSync, 'function', 'RotateSync should be a function');
     });
 
-    // t.test('start event', function(t) {
-    //     t.plan(5);
-    //     Time.set(0);
-    //     var scaleSync = new RotateSync();
-    //     scaleSync.posA = [1, 2];
-    //     scaleSync.posB = [3, 4];
-    //     scaleSync.touchAId = 4;
-    //     scaleSync.touchBId = 5;
-    //     // Low-level eventing functionality is being tested in TwoFingerSync.spec.js
-    //     scaleSync.on('start', function(actualEvent) {
-    //         t.equal(actualEvent.count, 2);
-    //         t.deepEqual(actualEvent.touches, [4, 5]);
-    //         // tested in TwoFingerSync
-    //         t.equal(Array.isArray(actualEvent.center), true);
-    //         t.equal(typeof actualEvent.distance, 'number');
-    //         t.pass('scaleSync should emit update event');
-    //     });
-    //     scaleSync._startUpdate({
-    //         touches: [scaleSync.posA, scaleSync.posB]
-    //     });
-    // });
-    
-    // t.test('update event', function(t) {
-    //     t.plan(1);
-    //     Time.set(0);
-    //     var scaleSync = new RotateSync();
-    //     scaleSync.posA = [1, 2];
-    //     scaleSync.posB = [3, 4];
-    //     scaleSync.touchAId = 4;
-    //     scaleSync.touchBId = 5;
-    //     scaleSync.on('update', function() {
-    //         // TODO test event format
-    //         t.pass('scaleSync should emit update event');
-    //     });
-    //     scaleSync._moveUpdate(200);
-    // });
+    t.test('start event', function(t) {
+        t.plan(2);
+        var rotateSync = new RotateSync();
+        var expectedEvent = {
+            count: 2,
+            angle: 0,
+            center: [1, 1],
+            touches: [1, 2]
+        };
+        rotateSync.on('start', function(event) {
+            t.deepEqual(event, expectedEvent);
+            t.pass('rotateSync should emit start event');
+        });
+        rotateSync.posA = [0, 0];
+        rotateSync.touchAId = 1;
+        rotateSync.posB = [2, 2];
+        rotateSync.touchBId = 2;
 
-    // t.test('end event', function(t) {
-    //     t.plan(1);
-    //     Time.set(0);
-    //     var scaleSync = new RotateSync();
-    //     scaleSync.on('end', function() {
-    //         t.pass('scaleSync should emit end event');
-    //     });
-    // });
+        rotateSync._startUpdate({
+            touches: [{}, {}]
+        });
+    });
+
+    t.test('update event', function(t) {
+        t.plan(2);
+        var rotateSync = new RotateSync();
+
+        var expectedEvent = {
+            delta: 0,
+            velocity: 0,
+            angle: 0,
+            center: [1.5, 1.5],
+            touches: [1, 2]
+        };
+        rotateSync.on('update', function(event) {
+            t.deepEqual(event, expectedEvent);
+            t.pass('rotateSync should emit update event');
+        });
+
+        rotateSync.posA = [0, 0];
+        rotateSync.touchAId = 1;
+        rotateSync.posB = [1, 1];
+        rotateSync.touchBId = 2;
+        rotateSync._startUpdate({
+            touches: [{}, {}]
+        });
+
+        rotateSync.posA = [1, 1];
+        rotateSync.touchAId = 1;
+        rotateSync.posB = [2, 2];
+        rotateSync.touchBId = 2;
+        rotateSync._moveUpdate(100);
+    });
 });

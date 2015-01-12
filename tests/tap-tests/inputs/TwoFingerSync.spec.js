@@ -1,4 +1,5 @@
-// 100% DONE
+// 90% DONE
+// TODO sets protected properties (posA, posB etc.)
 // This is a [Testcase Superclass](http://xunitpatterns.com/Testcase%20Superclass.html)
 
 var test = require('tape');
@@ -15,6 +16,7 @@ test('TwoFingerSync', function(t) {
 
     t.test('calculateAngle function', function(t) {
         t.plan(1);
+        // FIX
         t.equal(TwoFingerSync.calculateAngle([0, 0], [-Math.PI, 0]), Math.PI);
     });
 

@@ -1,5 +1,5 @@
 // 50% DONE
-// TODO MockTwoFingerSync, event format
+// TODO MockTwoFingerSync, event format, end event
 
 var test = require('tape');
 var Time = require('../../helpers/Time');
