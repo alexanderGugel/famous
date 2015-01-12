@@ -1,4 +1,4 @@
-// 75% done
+// 75% DONE
 // TODO event format
 
 var test = require('tape');

@@ -1,4 +1,4 @@
-// DONE
+// 100% DONE
 
 var test = require('tape');
 var Time = require('../../helpers/Time');
