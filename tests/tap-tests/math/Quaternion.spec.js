@@ -132,19 +132,28 @@ test('Quaternion', function(t) {
     });
 
     t.test('setWXYZ method', function(t) {
-        t.plan(1);
+        t.plan(3);
         var quaternion = new Quaternion(Math.PI*0.5, 8, 1, 3);
         t.equal(typeof quaternion.setWXYZ, 'function', 'quaternion.setWXYZ should be a function');
 
-        // TODO
+        quaternion.setWXYZ(0, 1, 2, 3);
+        t.deepEqual(quaternion, {w: 0, x: 1, y: 2, z: 3});
+
+        quaternion.setWXYZ(0, 1, 2, 4);
+        t.deepEqual(quaternion, {w: 0, x: 1, y: 2, z: 4});
     });
 
     t.test('set method', function(t) {
-       t.plan(1);
-       var quaternion = new Quaternion(Math.PI*0.5, 8, 1, 3);
-       t.equal(typeof quaternion.set, 'function', 'quaternion.setWXYZ should be a function');
+        t.plan(3);
+        var quaternion = new Quaternion(Math.PI*0.5, 8, 1, 3);
+        t.equal(typeof quaternion.set, 'function', 'quaternion.setWXYZ should be a function');
 
-       // TODO
+        // TODO Fix in famous - this is confusing
+        quaternion.set([1, 2, 3]);
+        t.deepEqual(quaternion, {w: 0, x: 1, y: 2, z: 3}, 'quaternion.set should accept array and set w to 0 in that case');
+        
+        quaternion.set({w: 0, x: 1, y: 2, z: 4});
+        t.deepEqual(quaternion, {w: 0, x: 1, y: 2, z: 4}, 'quaternion.set should accept object literal');
     });
 
     t.test('put method', function(t) {
@@ -156,11 +165,12 @@ test('Quaternion', function(t) {
     });
 
     t.test('clone method', function(t) {
-       t.plan(1);
+       t.plan(3);
        var quaternion = new Quaternion(Math.PI*0.5, 8, 1, 3);
        t.equal(typeof quaternion.clone, 'function', 'quaternion.setWXYZ should be a function');
 
-       // TODO
+       t.deepEqual(quaternion.clone(), quaternion);
+       t.notEqual(quaternion.clone(), quaternion);
     });
 
     t.test('clear method', function(t) {
@@ -180,11 +190,14 @@ test('Quaternion', function(t) {
     });
 
     t.test('dot method', function(t) {
-       t.plan(1);
-       var quaternion = new Quaternion(Math.PI*0.5, 8, 1, 3);
+       t.plan(2);
+       var quaternion = new Quaternion();
        t.equal(typeof quaternion.dot, 'function', 'quaternion.setWXYZ should be a function');
 
-       // TODO
+       var q1 = new Quaternion(Math.PI*0.5, 8, 1, 3);
+       var q2 = new Quaternion(3,           4, 2, 6);
+
+       t.deepEqual(q1.dot(q2), Math.PI*1.5 + 32 + 2 + 18);
     });
 
     t.test('normSquared method', function(t) {
@@ -200,15 +213,20 @@ test('Quaternion', function(t) {
        var quaternion = new Quaternion(Math.PI*0.5, 8, 1, 3);
        t.equal(typeof quaternion.norm, 'function', 'quaternion.setWXYZ should be a function');
 
-       // TODO
+       // TODO 
     });
 
     t.test('isZero method', function(t) {
-       t.plan(1);
-       var quaternion = new Quaternion(Math.PI*0.5, 8, 1, 3);
+       t.plan(7);
+       var quaternion = new Quaternion();
        t.equal(typeof quaternion.isZero, 'function', 'quaternion.setWXYZ should be a function');
 
-       // TODO
+       t.equal(quaternion.isZero(), true, 'Quaternion should be zero by default');
+       t.equal((new Quaternion(0, 0, 0, 0)).isZero(), true);
+       t.equal((new Quaternion(1, 0, 0, 0)).isZero(), true);
+       t.equal((new Quaternion(0, 1, 0, 0)).isZero(), false);
+       t.equal((new Quaternion(0, 0, 1, 0)).isZero(), false);
+       t.equal((new Quaternion(0, 0, 0, 1)).isZero(), false);
     });
 
     t.test('getTransform method', function(t) {
