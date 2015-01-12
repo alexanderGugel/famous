@@ -1,4 +1,5 @@
 // 100% DONE
+// This is a [Testcase Superclass](http://xunitpatterns.com/Testcase%20Superclass.html)
 
 var test = require('tape');
 var Time = require('../../helpers/Time');
