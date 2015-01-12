@@ -2,7 +2,6 @@ var test = require('tape');
 var Transitionable = require('../../../src/transitions/Transitionable');
 var SpringTransition = require('../../../src/transitions/SpringTransition');
 var WallTransition = require('../../../src/transitions/WallTransition');
-var SnapTransition = require('../../../src/transitions/SnapTransition');
 
 test('Transitionable', function(t) {
     t.test('constructor', function(t) {
@@ -72,19 +71,19 @@ test('Transitionable', function(t) {
         t.equal(transitionable.get(), 2, 'Transitionable.set should set state');
 
         // TODO broken in current famous
+        // Callback SHOULD be called twice
         var callback = function() {
             t.pass('Transitionable.set should accept and invoke callback function');
         };
 
-        transitionable.set(4, undefined, callback);
         transitionable.set(4, { duration: 500 }, callback);
+        transitionable.set(4, undefined, callback);
     });
 
     t.test('reset method', function(t) {
         var transitionable = new Transitionable();
         t.equal(typeof transitionable.reset, 'function', 'transitionable.reset should be a function');
 
-        var transitionable = new Transitionable();
         transitionable.set(0);
         transitionable.set(1, { duration: 500 });
         transitionable.reset();
@@ -99,7 +98,6 @@ test('Transitionable', function(t) {
         t.equal(typeof transitionable.delay, 'function', 'transitionable.delay should be a function');
 
         // TODO Bug in famous. Doesn't work when using duration.
-        var transitionable = new Transitionable();
         transitionable.set(0);
         transitionable.delay(500);
         t.equal(transitionable.get(), 0, 'transitionable.delay should delay the execution of the action queue');
@@ -124,7 +122,6 @@ test('Transitionable', function(t) {
         var transitionable = new Transitionable();
         t.equal(typeof transitionable.isActive, 'function', 'transitionable.isActive should be a function');
 
-        var transitionable = new Transitionable(0);
         t.equal(transitionable.isActive(), false, 'transitionable.isActive should return false if transition is not active');
 
         transitionable.set(1, { duration: 100 });
@@ -140,7 +137,6 @@ test('Transitionable', function(t) {
         var transitionable = new Transitionable();
         t.equal(typeof transitionable.halt, 'function', 'transitionable.halt should be a function');
 
-        var transitionable = new Transitionable(0);
         transitionable.set(1, { duration: 500 });
 
         setTimeout(function() {
