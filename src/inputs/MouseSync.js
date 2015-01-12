@@ -169,6 +169,7 @@ define(function(require, exports, module) {
         var y = event.clientY;
 
         var currTime = Date.now();
+        console.log(currTime)
 
         var diffX = x - prevCoord[0];
         var diffY = y - prevCoord[1];
