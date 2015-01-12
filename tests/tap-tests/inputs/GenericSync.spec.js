@@ -65,44 +65,44 @@ test('GenericSync', function(t) {
         t.equal(typeof genericSync.setOptions, 'function', 'genericSync.setOptions should be a function');
     });
     
-    t.test('pipeSync method', function(t) {
-        t.plan(1);
-        var genericSync = new GenericSync();
-        t.equal(typeof genericSync.pipeSync, 'function', 'genericSync.pipeSync should be a function');
+    // t.test('pipeSync method', function(t) {
+    //     t.plan(2);
+    //     var genericSync = new GenericSync();
+    //     t.equal(typeof genericSync.pipeSync, 'function', 'genericSync.pipeSync should be a function');
 
-        var syncObject = {
-            // bla: MockSync.createConstructor(),
-            blub: MockSync.createConstructor(),
-        };
+    //     var MockSyncConstructor = MockSync.createConstructor();
 
-        GenericSync.register(syncObject);
-        genericSync.addSync(['blub']);
-        genericSync.pipeSync('blub');
+    //     var syncObject = {
+    //         // bla: MockSync.createConstructor(),
+    //         blub: MockSyncConstructor,
+    //     };
 
-        var mockSyncs = MockSync.getMockSyncs();
-        // var blaSync = mockSyncs[mockSyncs.length - 1];
-        var blubSync = mockSyncs[mockSyncs.length - 1];
+    //     GenericSync.register(syncObject);
+    //     genericSync.addSync(['blub']);
+    //     genericSync.addSync(['bla']);
+    //     genericSync.pipeSync('bla');
+    //     genericSync.pipeSync('blub');
 
-        blubSync.on('update', function() {
-            t.pass('genericSync.pipeSync should pipe all events to sync');
-        });
-
-        genericSync._eventInput.emit('update', {});
-
-        // blaSync.emitUpdate();
-
-        // blubSync.emitUpdate();
-
-        // TODO
-    });
-
-    t.test('unpipeSync method', function(t) {
-        t.plan(1);
-        var genericSync = new GenericSync();
-        t.equal(typeof genericSync.unpipeSync, 'function', 'genericSync.unpipeSync should be a function');
+    //     genericSync.on('boom', t.pass);
 
 
-        // TODO
-    });
+
+    //     // genericSync._eventInput.emit('update', {});
+
+    //     // blaSync.emitUpdate();
+
+    //     // blubSync.emitUpdate();
+
+    //     // TODO
+    // });
+
+    // t.test('unpipeSync method', function(t) {
+    //     t.plan(1);
+    //     var genericSync = new GenericSync();
+    //     t.equal(typeof genericSync.unpipeSync, 'function', 'genericSync.unpipeSync should be a function');
+
+
+    //     // TODO
+    // });
 });
 

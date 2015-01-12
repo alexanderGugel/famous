@@ -50,6 +50,7 @@ define(function(require, exports, module) {
     }
 
     function _handleEnd(event) {
+        // debugger;
         if (!this.isTouched) return;
 
         for (var i = 0; i < event.changedTouches.length; i++) {

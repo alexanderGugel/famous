@@ -57,8 +57,6 @@ define(function(require, exports, module) {
 
     var _now = Date.now;
 
-    console.log(_now)
-
     // private
     TwoFingerSync.prototype.handleStart = function handleStart(event) {
         for (var i = 0; i < event.changedTouches.length; i++) {
@@ -81,13 +79,9 @@ define(function(require, exports, module) {
 
     // private
     TwoFingerSync.prototype.handleMove = function handleMove(event) {
-        console.log(this.timestampA);
-        console.log(this.timestampB);
-
         if (!(this.touchAEnabled && this.touchBEnabled)) return;
         var prevTimeA = this.timestampA;
         var prevTimeB = this.timestampB;
-        console.log(prevTimeA, prevTimeB)
         var diffTime;
         for (var i = 0; i < event.changedTouches.length; i++) {
             var touch = event.changedTouches[i];
