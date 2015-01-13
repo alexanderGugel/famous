@@ -33,7 +33,7 @@ test('DesktopEmulationMode', function(t) {
         });
     });
 
-    t.test('enables', function(t) {
+    t.test('enabled', function(t) {
         require('../../../src/inputs/DesktopEmulationMode');
         
         var element = document.createElement('div');

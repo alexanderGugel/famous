@@ -6,7 +6,7 @@ test('EventEmitter', function(t) {
         t.equal(typeof EventEmitter, 'function', 'EventEmitter should be a function');
 
         t.doesNotThrow(function() {
-	        var eventEmitter = new EventEmitter();
+	        new EventEmitter();
         }, 'EventEmitter constructor should not throw an error');
 
         t.end();
@@ -28,7 +28,7 @@ test('EventEmitter', function(t) {
         var eventEmitter = new EventEmitter();
         t.equal(typeof eventEmitter.on, 'function', 'eventEmitter.on should be a function');
 
-        var referenceEvent = {test: true, test: {test: true}};
+        var referenceEvent = {test1: true, test2: {test3: true}};
 
         var listener = function(e) {
         	t.pass('eventEmitter should call listener function');

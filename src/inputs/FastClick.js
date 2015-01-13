@@ -38,11 +38,13 @@ define(function(require, exports, module) {
       });
 
       window.addEventListener('touchend', function(event) {
+        // debugger
           var currTime = _now();
           for (var i = 0; i < event.changedTouches.length; i++) {
               var touch = event.changedTouches[i];
               var startTime = potentialClicks[touch.identifier];
               if (startTime && currTime - startTime < clickThreshold) {
+                // debugger;
                   var clickEvt = new window.CustomEvent('click', {
                       'bubbles': true,
                       'detail': touch

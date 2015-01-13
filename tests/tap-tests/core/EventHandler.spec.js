@@ -7,7 +7,7 @@ test('EventHandler', function(t) {
         t.equal(typeof EventHandler, 'function', 'EventHandler should be a function');
 
         t.doesNotThrow(function() {
-            var eventHandler = new EventHandler();
+            new EventHandler();
         }, 'EventHandler constructor should not throw an error');
 
         t.end();
@@ -15,7 +15,7 @@ test('EventHandler', function(t) {
 
     t.test('EventEmitter methods', function(t) {
         var eventHandler = new EventHandler();
-        var eventEmitter = new EventEmitter()
+        var eventEmitter = new EventEmitter();
         for (var prop in eventEmitter) {
             if (typeof prop === 'function') {
                 t.ok(eventHandler[prop], 'EventEmitter should have all methods of EventEmitter, including ' + prop);
@@ -136,9 +136,7 @@ test('EventHandler', function(t) {
 
         for (var i = 0; i < 3; i++) {
             events[i] = {};
-            eventHandler.on('event' + i, function(e) {
-                t.equal(e, events[i]);
-            });
+            eventHandler.on('event' + i, t.equal.bind(t, events[i]));
         }
 
         for (i = 0; i < 3; i++) {

@@ -57,7 +57,7 @@ test('Engine', function(t) {
 		t.plan('resize event', function(t) {
 			t.plan(1);
 			var onresize = function() {
-				t.pass('Engine should ')
+				t.pass('Engine should emit resize event on window resize');
 				Engine.removeListener(onresize);
 			};
 			Engine.on('resize', onresize);

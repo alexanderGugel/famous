@@ -5,13 +5,15 @@ var MockTransitionable = require('../../helpers/MockTransitionable');
 
 test('Accumulator', function(t) {
     t.test('constructor', function(t) {
-        t.plan(1);
+        t.plan(2);
         t.equal(typeof Accumulator, 'function', 'Accumulator should be a function');
+        var accumulator = new Accumulator(4);
+        t.equal(accumulator.get(), 4, 'Accumulator should set initial state');
     });
 
     t.test('get method', function(t) {
         t.plan(1);
-        var accumulator = new Accumulator();
+        var accumulator = new Accumulator(4);
         t.equal(typeof accumulator.get, 'function', 'accumulator.get should be a function');
     });
 
