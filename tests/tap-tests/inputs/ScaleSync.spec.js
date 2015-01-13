@@ -43,7 +43,6 @@ test('ScaleSync', function(t) {
         scaleSync.touchAId = 4;
         scaleSync.touchBId = 5;
         scaleSync.on('update', function() {
-            // TODO test event format
             t.pass('scaleSync should emit update event');
         });
         scaleSync._moveUpdate(200);

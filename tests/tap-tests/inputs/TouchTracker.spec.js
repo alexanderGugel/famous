@@ -1,6 +1,3 @@
-// 80% DONE
-// TODO Test event format
-
 var test = require('tape');
 var Time = require('../../helpers/Time');
 var Touch = require('../../helpers/Touch');

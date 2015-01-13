@@ -1,6 +1,3 @@
-// 75% DONE
-// TODO event format
-
 var test = require('tape');
 var Time = require('../../helpers/Time');
 Time.set(0);

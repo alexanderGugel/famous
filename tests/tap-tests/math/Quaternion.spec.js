@@ -2,6 +2,7 @@ var test       = require('tape');
 var Quaternion = require('../../../src/math/Quaternion');
 var Matrix     = require('../../../src/math/Matrix');
 var Vector     = require('../../../src/math/Vector');
+var deepRound  = require('../../helpers/deepRound');
 
 test('Quaternion', function(t) {
     t.test('constructor', function(t) {
@@ -87,18 +88,24 @@ test('Quaternion', function(t) {
     
     t.test('rotateVector method', function(t) {
         t.plan(1);
-        var quaternion = new Quaternion(Math.PI*0.2, 4, 5, 6);
+        var quaternion = new Quaternion(Math.PI*0.5, Math.sqrt(2), Math.sqrt(2), Math.sqrt(2));
         t.equal(typeof quaternion.rotateVector, 'function', 'quaternion.rotateVector should be a function');
 
         // TODO
     });
     
     t.test('inverse method', function(t) {
-        t.plan(1);
-        var quaternion = new Quaternion(Math.PI*0.2, 4, 5, 6);
+        t.plan(2);
+        var quaternion = new Quaternion(1.5, 9.2, 2.3, -2.5);
         t.equal(typeof quaternion.inverse, 'function', 'quaternion.inverse should be a function');
-
-        // TODO
+        var q1 = quaternion.clone();
+        var q2 = quaternion.clone();
+        t.deepEqual(deepRound(q1.multiply(q2).inverse(), 1), {
+          x: 0,
+          y: 0,
+          z: 0,
+          w: 0
+        }, 'Multiplication of quaternion with its inverse should return its identity');
     });
     
     t.test('negate method', function(t) {
