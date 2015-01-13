@@ -1,5 +1,6 @@
-var test = require('tape');
-var Random = require('../../../src/math/Random');
+var test    = require('tape');
+window.Math = require('../../helpers/MockMath');
+var Random  = require('../../../src/math/Random');
 
 // Testing random number generators is damn hard, therefore the following tests are pretty weak and probalistic.
 test('Random', function(t) {
@@ -16,11 +17,12 @@ test('Random', function(t) {
         //     }
         // }
 
+        var i;
         var min = 2;
         var max = 9;
         var desiredMatches = [2, 3, 4, 5, 6, 7, 8, 9];
         var actualMatches = {};
-        for (var i = 0; i < 100; i++) {
+        for (i = 0; i < 100; i++) {
             var rand = Random.integer(min, max);
             actualMatches[rand] = true;
         }
@@ -29,7 +31,7 @@ test('Random', function(t) {
             return parseFloat(n);
         }).sort(), desiredMatches);
 
-        for (var i = 0; i < 100; i++) {
+        for (i = 0; i < 100; i++) {
             if (Random.range(0, 10) % 1 === 1) {
                 t.fail('Random.integer should return ints');
             }
