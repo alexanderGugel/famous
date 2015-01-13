@@ -1,8 +1,11 @@
 var test = require('tape');
+var Time = require('../../helpers/Time');
+Time.set(0);
 var Transitionable = require('../../../src/transitions/Transitionable');
+
+// TODO MockTransition
 var SpringTransition = require('../../../src/transitions/SpringTransition');
 var WallTransition = require('../../../src/transitions/WallTransition');
-var Engine = require('../../../src/core/Engine');
 
 test('Transitionable', function(t) {
     t.test('constructor', function(t) {
@@ -75,10 +78,12 @@ test('Transitionable', function(t) {
             t.pass('Transitionable.set should accept and invoke callback function');
         };
 
-        // TODO broken in current famous?
-        // Callback SHOULD be called twice
+        Time.set(0);
         transitionable.set(4, { duration: 500 }, callback);
+        Time.set(510);
         transitionable.set(4, undefined, callback);
+        Time.set(550);
+        transitionable.set(0);
     });
 
     t.test('reset method', function(t) {
@@ -98,6 +103,8 @@ test('Transitionable', function(t) {
         var transitionable = new Transitionable();
         t.equal(typeof transitionable.delay, 'function', 'transitionable.delay should be a function');
 
+        // TODO test callback
+
         transitionable.set(0);
         transitionable.delay(500);
         t.equal(transitionable.get(), 0, 'transitionable.delay should delay the execution of the action queue');
@@ -106,13 +113,49 @@ test('Transitionable', function(t) {
     });
 
     t.test('get method', function(t) {
-        var transitionable = new Transitionable();
-        t.equal(typeof transitionable.get, 'function', 'transitionable.get should be a function');
-        transitionable.set(4);
-        t.equal(transitionable.get(), 4, 'transitionable.get should return previously set value');
-        transitionable.set(2);
-        t.equal(transitionable.get(), 2, 'transitionable.get should return previously set value');
-        t.end();
+        t.test('existence', function(t) {
+            t.plan(1);
+            var transitionable = new Transitionable();
+            t.equal(typeof transitionable.get, 'function', 'transitionable.get should be a function');
+        });
+
+        t.test('number', function(t) {
+            t.plan(2);
+            var transitionable = new Transitionable();
+            transitionable.set(4);
+            t.equal(transitionable.get(), 4, 'transitionable.get should return previously set value');
+            transitionable.set(2);
+            t.equal(transitionable.get(), 2, 'transitionable.get should return previously set value');
+        });
+
+        t.test('array', function(t) {
+            t.plan(2);
+            var transitionable = new Transitionable();
+            transitionable.set([1, 2]);
+            t.deepEqual(transitionable.get(), [1, 2], 'transitionable.get should return previously set value');
+            transitionable.set([3, 4]);
+            t.deepEqual(transitionable.get(), [3, 4], 'transitionable.get should return previously set value');
+        });
+
+        t.test('number timestamp', function(t) {
+            t.plan(1);
+            var transitionable = new Transitionable();
+            Time.set(0);
+            transitionable.set(0);
+            transitionable.set(1, { transition: 500 });
+            Time.set(250);
+            t.equal(transitionable.get(), 0.5);
+        });
+
+        t.test('array timestamp', function(t) {
+            t.plan(1);
+            var transitionable = new Transitionable();
+            Time.set(0);
+            transitionable.set([0, 0, 0]);
+            transitionable.set([1, 1, 1], { transition: 500 });
+            Time.set(250);
+            t.deepEqual(transitionable.get(), [0.5, 0.5, 0.5]);
+        });
     });
 
     t.test('isActive method', function(t) {
@@ -130,15 +173,18 @@ test('Transitionable', function(t) {
     });
 
     t.test('halt method', function(t) {
-        t.plan(2);
+        t.plan(4);
         var transitionable = new Transitionable();
         t.equal(typeof transitionable.halt, 'function', 'transitionable.halt should be a function');
 
+        Time.set(0);
+        transitionable.set(0);
         transitionable.set(1, { duration: 500 });
-
-        setTimeout(function() {
-            transitionable.halt();
-            t.equal(~~(0.5 - transitionable.get()), 0, 'transitionable.halt should halt transition');
-        }, 250);
+        Time.set(250);
+        t.equal(transitionable.get(), 0.5);
+        transitionable.halt();
+        Time.set(600);
+        t.equal(transitionable.isActive(), false, 'transitionable should not be active after transition has been halted');
+        t.equal(transitionable.get(), 0.5, 'transitionable state should not change after transition has been halted');
     });
 });

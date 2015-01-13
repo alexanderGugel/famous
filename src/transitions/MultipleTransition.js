@@ -10,6 +10,12 @@
 define(function(require, exports, module) {
     var Utility = require('../utilities/Utility');
 
+    // TODO
+    // Throw error when transitioning between number and array
+    // get should accept timestamp
+    // endState.length != this.state.length
+    // this.state caching
+
     /**
      * Transition meta-method to support transitioning multiple
      *   values with scalar-only methods.

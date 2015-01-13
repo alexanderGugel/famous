@@ -13,7 +13,7 @@ define(function(require, exports, module) {
      *
      * A state maintainer for a smooth transition between
      *    numerically-specified states.  Example numeric states include floats or
-     *    Transfornm objects.
+     *    Transform objects.
      *
      *    An initial state is set with the constructor or set(startValue). A
      *    corresponding end state and transition are set with set(endValue,
