@@ -2,6 +2,7 @@ var test = require('tape');
 var Transitionable = require('../../../src/transitions/Transitionable');
 var SpringTransition = require('../../../src/transitions/SpringTransition');
 var WallTransition = require('../../../src/transitions/WallTransition');
+var Engine = require('../../../src/core/Engine');
 
 test('Transitionable', function(t) {
     t.test('constructor', function(t) {
@@ -70,12 +71,12 @@ test('Transitionable', function(t) {
         transitionable.set(2);
         t.equal(transitionable.get(), 2, 'Transitionable.set should set state');
 
-        // TODO broken in current famous
-        // Callback SHOULD be called twice
         var callback = function() {
             t.pass('Transitionable.set should accept and invoke callback function');
         };
 
+        // TODO broken in current famous?
+        // Callback SHOULD be called twice
         transitionable.set(4, { duration: 500 }, callback);
         transitionable.set(4, undefined, callback);
     });
@@ -97,14 +98,11 @@ test('Transitionable', function(t) {
         var transitionable = new Transitionable();
         t.equal(typeof transitionable.delay, 'function', 'transitionable.delay should be a function');
 
-        // TODO Bug in famous. Doesn't work when using duration.
         transitionable.set(0);
         transitionable.delay(500);
         t.equal(transitionable.get(), 0, 'transitionable.delay should delay the execution of the action queue');
         transitionable.set(1);
-        setTimeout(function() {
-            t.equal(transitionable.get(), 1, 'transitionable.delay should delay the execution of the action queue');
-        }, 1000);
+        t.equal(transitionable.get(500), 1, 'transitionable.delay should delay the execution of the action queue');
     });
 
     t.test('get method', function(t) {
@@ -127,7 +125,6 @@ test('Transitionable', function(t) {
         transitionable.set(1, { duration: 100 });
         t.equal(transitionable.isActive(), true, 'transitionable.isActive should return true if transition is active');
 
-        // TODO Bug in famous - doesn't work when using setTimeout and not halting the transitionable
         transitionable.halt();
         t.equal(transitionable.isActive(), false, 'transitionable.isActive should return false if transition is not active');
     });
@@ -140,7 +137,7 @@ test('Transitionable', function(t) {
         transitionable.set(1, { duration: 500 });
 
         setTimeout(function() {
-            transitionable.halt()
+            transitionable.halt();
             t.equal(~~(0.5 - transitionable.get()), 0, 'transitionable.halt should halt transition');
         }, 250);
     });

@@ -6,12 +6,12 @@ test('CachedMap', function(t) {
         t.equal(typeof CachedMap, 'function', 'CachedMap should be a function');
 
         t.doesNotThrow(function() {
-            var cachedMap = new CachedMap();
+            new CachedMap();
         }, void 0, 'CachedMap constructor should not throw an error when invoked without arguments')
         
         t.doesNotThrow(function() {
             var noop = function () {};
-            var cachedMap = new CachedMap(noop);
+            new CachedMap(noop);
         }, void 0, 'CachedMap constructor should not throw an error when invoked with mapping function')
 
         t.end();
