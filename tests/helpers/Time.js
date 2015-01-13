@@ -9,7 +9,7 @@ var _originalNowFn = Date.now;
 Time.set = function(t) {
     _t = t;
     Date.now = _nowFn;
-}
+};
 
 Time.reset = function() {
     Date.now = _originalNowFn;

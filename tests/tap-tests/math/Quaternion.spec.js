@@ -267,10 +267,10 @@ test('Quaternion', function(t) {
     });
 
     t.test('slerp method', function(t) {
-       t.plan(1);
-       var quaternion = new Quaternion(Math.PI*0.5, 8, 1, 3);
-       t.equal(typeof quaternion.slerp, 'function', 'quaternion.setWXYZ should be a function');
+      t.plan(1);
+      var quaternion = new Quaternion(Math.PI*0.5, 5, 2, 8);
+      t.equal(typeof quaternion.slerp, 'function', 'quaternion.setWXYZ should be a function');
 
-       // TODO
+      // TODO
     });
 });

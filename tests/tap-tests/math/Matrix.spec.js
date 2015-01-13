@@ -5,7 +5,10 @@ var Vector = require('../../../src/math/Vector');
 test('Matrix', function(t) {
     t.test('constructor', function(t) {
         t.equal(typeof Matrix, 'function', 'Matrix should be a function');
-        var m = new Matrix();
+
+        t.doesNotThrow(function() {
+            new Matrix();
+        }, 'Matrix constructor should not throw an error');
 
         t.end();
     });
@@ -92,14 +95,13 @@ test('Matrix', function(t) {
         ]);
 
         var expected = [
-            [3, 5, 5],
-            [3, 5, 5],
-            [3, 5, 5]
+            [7, 24, 41],
+            [11, 36, 69],
+            [25, 66, 108]
         ];
 
         // TODO broken in famous
-        // console.log(result)
-        // t.deepEqual(m.get(), expected, 'matrix.multiply should multiply two matrices');
+        t.deepEqual(result.get(), expected, 'matrix.multiply should multiply two matrices');
 
         t.end();
     });

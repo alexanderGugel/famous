@@ -104,7 +104,7 @@ define(function(require, exports, module) {
      */
     Matrix.prototype.multiply = function multiply(M2) {
         var M1 = this.get();
-        var result = [[]];
+        var result = [[], [], []];
         for (var i = 0; i < 3; i++) {
             result[i] = [];
             for (var j = 0; j < 3; j++) {

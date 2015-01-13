@@ -1,6 +1,3 @@
-// 50% DONE
-// TODO event format
-
 var test = require('tape');
 var RotateSync = require('../../../src/inputs/RotateSync');
 
