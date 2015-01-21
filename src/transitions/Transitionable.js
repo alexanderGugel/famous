@@ -218,5 +218,15 @@ define(function(require, exports, module) {
         return this.set(this.get());
     };
 
+    Transitionable.prototype.pause = function pause() {
+        this._engineInstance.pause();
+        return this;
+    };
+
+    Transitionable.prototype.resume = function resume() {
+        this._engineInstance.resume();
+        return this;
+    };
+
     module.exports = Transitionable;
 });

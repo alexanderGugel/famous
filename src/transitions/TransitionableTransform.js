@@ -226,5 +226,21 @@ define(function(require, exports, module) {
         return this;
     };
 
+    TransitionableTransform.prototype.pause = function pause() {
+        this.translate.pause();
+        this.rotate.pause();
+        this.skew.pause();
+        this.scale.pause();
+        return this;
+    };
+    
+    TransitionableTransform.prototype.resume = function resume() {
+        this.translate.resume();
+        this.rotate.resume();
+        this.skew.resume();
+        this.scale.resume();
+        return this;
+    };
+
     module.exports = TransitionableTransform;
 });

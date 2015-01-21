@@ -314,5 +314,23 @@ define(function(require, exports, module) {
         return this._modifier.modify(target);
     };
 
+    StateModifier.prototype.pause = function pause() {
+        this._transformState.pause();
+        this._opacityState.pause();
+        this._originState.pause();
+        this._alignState.pause();
+        this._sizeState.pause();
+        this._proportionsState.pause();
+    };
+    
+    StateModifier.prototype.resume = function resume() {
+        this._transformState.resume();
+        this._opacityState.resume();
+        this._originState.resume();
+        this._alignState.resume();
+        this._sizeState.resume();
+        this._proportionsState.resume();
+    };
+
     module.exports = StateModifier;
 });

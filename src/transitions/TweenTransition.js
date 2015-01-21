@@ -46,6 +46,7 @@ define(function(require, exports, module) {
         this._callback = undefined;
         this.state = 0;
         this.velocity = undefined;
+        this._paused = 0;
     }
 
     /**
@@ -307,6 +308,7 @@ define(function(require, exports, module) {
      *    _interpolated to this point in time.
      */
     TweenTransition.prototype.get = function get(timestamp) {
+        if (this._paused) timestamp = this._paused;
         this.update(timestamp);
         return this.state;
     };
@@ -405,6 +407,16 @@ define(function(require, exports, module) {
      */
     TweenTransition.prototype.halt = function halt() {
         this.reset(this.get());
+    };
+
+    TweenTransition.prototype.pause = function pause() {
+        this._paused = Date.now();
+    };
+
+    TweenTransition.prototype.resume = function resume() {
+        var progressBeforePause = this._paused - this._startTime;
+        this._startTime = Date.now() - progressBeforePause;
+        this._paused = 0;
     };
 
     // Register all the default curves

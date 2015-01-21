@@ -73,5 +73,19 @@ define(function(require, exports, module) {
         }
     };
 
+    MultipleTransition.prototype.pause = function pause() {
+        for (var i = 0; i < this._instances.length; i++) {
+            this._instances[i].pause();
+        }
+        return this;
+    };
+    
+    MultipleTransition.prototype.resume = function resume() {
+        for (var i = 0; i < this._instances.length; i++) {
+            this._instances[i].resume();
+        }
+        return this;
+    };
+
     module.exports = MultipleTransition;
 });
