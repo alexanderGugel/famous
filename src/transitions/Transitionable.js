@@ -219,12 +219,12 @@ define(function(require, exports, module) {
     };
 
     Transitionable.prototype.pause = function pause() {
-        this._engineInstance.pause();
+        if (this._engineInstance) this._engineInstance.pause();
         return this;
     };
 
     Transitionable.prototype.resume = function resume() {
-        this._engineInstance.resume();
+        if (this._engineInstance) this._engineInstance.resume();
         return this;
     };
 
