@@ -62,6 +62,7 @@ define(function(require, exports, module) {
      */
     function setTimeout(fn, duration) {
         var callback = function() {
+            if (timerFunction._paused) return;
             var t2 = getTime();
             if (t2 - timerFunction._started >= duration) {
                 fn.apply(this, arguments);
@@ -88,6 +89,7 @@ define(function(require, exports, module) {
      */
     function setInterval(fn, duration) {
         var callback = function() {
+            if (timerFunction._paused) return;
             var t2 = getTime();
             if (t2 - timerFunction._started >= duration) {
                 fn.apply(this, arguments);
@@ -162,7 +164,11 @@ define(function(require, exports, module) {
             }
             return;
         }
-        FamousEngine.removeListener(_event, fn);
+        var index = timerFunctions.indexOf(fn);
+        if (index > -1) {
+            timerFunctions.splice(index, 1);    
+            FamousEngine.removeListener(_event, fn);
+        }
     }
 
     /**
