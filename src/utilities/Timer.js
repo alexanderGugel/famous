@@ -236,6 +236,18 @@ define(function(require, exports, module) {
         return timerFunction;
     }
 
+    function pauseAll() {
+        for (var i = 0; i < timerFunctions.length; i++) {
+            pause(timerFunctions[i]);
+        }
+    }
+    
+    function resumeAll() {
+        for (var i = 0; i < timerFunctions.length; i++) {
+            resume(timerFunctions[i]);
+        }
+    }
+
     module.exports = {
         setTimeout : setTimeout,
         setInterval : setInterval,
@@ -247,7 +259,9 @@ define(function(require, exports, module) {
         getAll: getAll,
         clearExcept: clearExcept,
         pause : pause,
-        resume : resume
+        pauseAll : pauseAll,
+        resume : resume,
+        resumeAll : resumeAll
     };
 
 });
