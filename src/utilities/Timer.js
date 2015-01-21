@@ -23,6 +23,8 @@ define(function(require, exports, module) {
 
     var _event  = 'prerender';
 
+    var timerFunctions = [];
+
     var getTime = (window.performance && window.performance.now) ?
         function() {
             return window.performance.now();
@@ -42,6 +44,7 @@ define(function(require, exports, module) {
      */
     function addTimerFunction(fn) {
         FamousEngine.on(_event, fn);
+        timerFunctions.push(fn);
         return fn;
     }
 
@@ -58,15 +61,17 @@ define(function(require, exports, module) {
      * @return {function} function passed in as parameter
      */
     function setTimeout(fn, duration) {
-        var t = getTime();
         var callback = function() {
             var t2 = getTime();
-            if (t2 - t >= duration) {
+            if (t2 - timerFunction._started >= duration) {
                 fn.apply(this, arguments);
                 FamousEngine.removeListener(_event, callback);
             }
         };
-        return addTimerFunction(callback);
+        var timerFunction = addTimerFunction(callback);
+        timerFunction._paused = 0;
+        timerFunction._started = getTime();
+        return timerFunction;
     }
 
     /**
@@ -82,15 +87,17 @@ define(function(require, exports, module) {
      * @return {function} function passed in as parameter
      */
     function setInterval(fn, duration) {
-        var t = getTime();
         var callback = function() {
             var t2 = getTime();
-            if (t2 - t >= duration) {
+            if (t2 - timerFunction._started >= duration) {
                 fn.apply(this, arguments);
-                t = getTime();
+                timerFunction._started = getTime();
             }
         };
-        return addTimerFunction(callback);
+        var timerFunction = addTimerFunction(callback);
+        timerFunction._paused = 0;
+        timerFunction._started = getTime();
+        return timerFunction;
     }
 
     /**
@@ -148,6 +155,13 @@ define(function(require, exports, module) {
      * @param {function} fn event linstener
      */
     function clear(fn) {
+        if (Array.isArray(fn)) {
+            var fns = fns;
+            for (var i = 0; i < fns.length; i++) {
+                clear(fns[i]);
+            }
+            return;
+        }
         FamousEngine.removeListener(_event, fn);
     }
 
@@ -191,13 +205,49 @@ define(function(require, exports, module) {
         };
     }
 
+    function clearAll() {
+        for (var i = 0; i < timerFunctions.length; i++) {
+            clear(timerFunctions[i]);
+        }
+    }
+
+    function getAll() {
+        return timerFunctions.slice();
+    }
+
+    function clearExcept(except) {
+        for (var i = 0; i < timerFunctions.length; i++) {
+            var fn = timerFunctions[i];
+            if (fn !== except) {
+                clear(fn);
+            }
+        }
+    }
+
+    function pause(timerFunction) {
+        timerFunction._paused = getTime();
+        return timerFunction;
+    }
+
+    function resume(timerFunction) {
+        var progressBeforePause = timerFunction._paused - timerFunction._started;
+        timerFunction._started = getTime() - progressBeforePause;
+        timerFunction._paused = 0;
+        return timerFunction;
+    }
+
     module.exports = {
         setTimeout : setTimeout,
         setInterval : setInterval,
         debounce : debounce,
         after : after,
         every : every,
-        clear : clear
+        clear : clear,
+        clearAll : clearAll,
+        getAll: getAll,
+        clearExcept: clearExcept,
+        pause : pause,
+        resume : resume
     };
 
 });
