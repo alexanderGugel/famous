@@ -269,6 +269,7 @@ define(function(require, exports, module) {
      * @return state {Number|Array}
      */
     WallTransition.prototype.get = function get() {
+        if (this._paused) return this._pausedState;
         _update.call(this);
         return _getParticlePosition.call(this);
     };
@@ -297,6 +298,18 @@ define(function(require, exports, module) {
         _setupDefinition.call(this, definition);
         _setTarget.call(this, state);
         _setCallback.call(this, callback);
+    };
+
+    WallTransition.prototype.pause = function pause() {
+        this._pausedState = this.get();
+        this._paused = true;
+        _sleep.call(this);
+    };
+
+    WallTransition.prototype.resume = function resume() {
+        this._paused = false;
+        this._pausedState = null;
+        _wake.call(this);
     };
 
     module.exports = WallTransition;

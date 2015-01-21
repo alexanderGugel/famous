@@ -234,6 +234,7 @@ s     *
      * @return state {Number|Array}
      */
     SnapTransition.prototype.get = function get() {
+        if (this._paused) return this._pausedState;
         _update.call(this);
         return _getParticlePosition.call(this);
     };
@@ -262,6 +263,18 @@ s     *
         _setupDefinition.call(this, definition);
         _setTarget.call(this, state);
         _setCallback.call(this, callback);
+    };
+
+    SnapTransition.prototype.pause = function pause() {
+        this._pausedState = this.get();
+        this._paused = true;
+        _sleep.call(this);
+    };
+
+    SnapTransition.prototype.resume = function resume() {
+        this._paused = false;
+        this._pausedState = null;
+        _wake.call(this);
     };
 
     module.exports = SnapTransition;

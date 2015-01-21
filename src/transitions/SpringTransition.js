@@ -41,6 +41,8 @@ define(function(require, exports, module) {
 
         this.PE.addBody(this.particle);
         this.PE.attach(this.spring, this.particle);
+
+        this._paused = false;
     }
 
     SpringTransition.SUPPORTS_MULTIPLE = 3;
@@ -244,6 +246,7 @@ define(function(require, exports, module) {
      * @return {Number|Array} state
      */
     SpringTransition.prototype.get = function get() {
+        if (this._paused) return this._pausedState;
         _update.call(this);
         return _getParticlePosition.call(this);
     };
@@ -272,6 +275,18 @@ define(function(require, exports, module) {
         _setupDefinition.call(this, definition);
         _setTarget.call(this, endState);
         _setCallback.call(this, callback);
+    };
+
+    SpringTransition.prototype.pause = function pause() {
+        this._pausedState = this.get();
+        this._paused = true;
+        _sleep.call(this);
+    };
+
+    SpringTransition.prototype.resume = function resume() {
+        this._paused = false;
+        this._pausedState = null;
+        _wake.call(this);
     };
 
     module.exports = SpringTransition;
