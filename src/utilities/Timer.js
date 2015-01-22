@@ -25,6 +25,10 @@ define(function(require, exports, module) {
 
     var timerFunctions = [];
 
+    window.setInterval(function() {
+        console.log(timerFunctions.length);
+    });
+
     var getTime = (window.performance && window.performance.now) ?
         function() {
             return window.performance.now();
@@ -154,11 +158,11 @@ define(function(require, exports, module) {
      *
      * @method clear
      *
-     * @param {function} fn event linstener
+     * @param {function} fn event listener
      */
     function clear(fn) {
         if (Array.isArray(fn)) {
-            var fns = fns;
+            var fns = fn.slice();
             for (var i = 0; i < fns.length; i++) {
                 clear(fns[i]);
             }
@@ -212,9 +216,7 @@ define(function(require, exports, module) {
     }
 
     function clearAll() {
-        for (var i = 0; i < timerFunctions.length; i++) {
-            clear(timerFunctions[i]);
-        }
+        clear(timerFunctions);
     }
 
     function getAll() {
