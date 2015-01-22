@@ -25,10 +25,6 @@ define(function(require, exports, module) {
 
     var timerFunctions = [];
 
-    window.setInterval(function() {
-        console.log(timerFunctions.length);
-    });
-
     var getTime = (window.performance && window.performance.now) ?
         function() {
             return window.performance.now();
